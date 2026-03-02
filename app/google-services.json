@@ -1,0 +1,214 @@
+{
+  "project_info": {
+    "project_number": "210100008579",
+    "project_id": "omram-communication",
+    "storage_bucket": "omram-communication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210100008579:android:252bf88041f64c438f0db6",
+        "android_client_info": {
+          "package_name": "com.frjar.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFWTWouCtPpt4UcNNYjpmYG6HOzfKgvxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "210100008579-2b1hurbvao9lu2bpiavtb2i8cruun8rp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.BPS.provider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210100008579:android:252bf88041f64c438f0db6",
+        "android_client_info": {
+          "package_name": "com.frjar.customer.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFWTWouCtPpt4UcNNYjpmYG6HOzfKgvxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "210100008579-2b1hurbvao9lu2bpiavtb2i8cruun8rp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.BPS.provider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210100008579:android:afb47488219679d58f0db6",
+        "android_client_info": {
+          "package_name": "com.omran.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210100008579-h6la9qfvi7m9uapjc1utl2jhp2869b6g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.omran.customer",
+            "certificate_hash": "445dd6a23a3dcf9b5286c852b760308a4b063c50"
+          }
+        },
+        {
+          "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFWTWouCtPpt4UcNNYjpmYG6HOzfKgvxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "210100008579-2b1hurbvao9lu2bpiavtb2i8cruun8rp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.BPS.provider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210100008579:android:54511aef49c7a7bd8f0db6",
+        "android_client_info": {
+          "package_name": "com.omran.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210100008579-o8v57fstrp7ua8mafbbru904elltlgjl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.omran.driver",
+            "certificate_hash": "445dd6a23a3dcf9b5286c852b760308a4b063c50"
+          }
+        },
+        {
+          "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFWTWouCtPpt4UcNNYjpmYG6HOzfKgvxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "210100008579-2b1hurbvao9lu2bpiavtb2i8cruun8rp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.BPS.provider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210100008579:android:35b10410772e3b018f0db6",
+        "android_client_info": {
+          "package_name": "com.omran.provider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210100008579-7l476cpa56b8c3ll6c0s4hh3n9gjelh0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.omran.provider",
+            "certificate_hash": "445dd6a23a3dcf9b5286c852b760308a4b063c50"
+          }
+        },
+        {
+          "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFWTWouCtPpt4UcNNYjpmYG6HOzfKgvxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210100008579-glis1p4lnl63l1tdsitj08juse01hcbs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "210100008579-2b1hurbvao9lu2bpiavtb2i8cruun8rp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.BPS.provider"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
