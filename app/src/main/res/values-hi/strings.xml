@@ -4,6 +4,7 @@
 
     <string name="lets_get_started_with_frjar">आइए फ्रजार के साथ शुरू करें</string>
     <string name="login">लॉगिन</string>
+    <string name="auth">Auth</string>
     <string name="sign_up">साइन अप</string>
     <string name="mobile_number">मोबाइल नंबर</string>
     <string name="login_with_otp">ओटीपी के साथ लॉगिन करें</string>
@@ -18,6 +19,13 @@
     <string name="email_or_mobile">ईमेल या मोबाइल</string>
     <string name="password">पासवर्ड</string>
     <string name="forgot_password">पासवर्ड भूल गए?</string>
+    <string name="continue_">जारी रखें</string>
+    <string name="enter_the_6digit_otp">6 अंकों का OTP दर्ज करें</string>
+    <string name="example_email">example@gmail.com</string>
+    <string name="input_your_password_account">अपना पासवर्ड दर्ज करें</string>
+    <string name="show">दिखाएं</string>
+    <string name="hide">छिपाएं</string>
+    <string name="mobile_number_placeholder">552344354</string>
     <string name="ready_to_secure_your_account">क्या आप अपना खाता सुरक्षित करने के लिए तैयार हैं?</string>
     <string name="email">ईमेल</string>
     <string name="optional">(वैकल्पिक)</string>
@@ -701,4 +709,5 @@
     <string name="some_of_the_products_cannot_be_delivered_at_the_selected_address">कुछ उत्पाद चयनित पते पर डिलीवर नहीं किए जा सकते</string>
     <string name="please_update_your_name">कृपया अपना नाम अपडेट करें</string>
     <string name="this_item_cannot_be_shipped_to_your_selected_delivery_location">यह आइटम आपके चुने गए डिलीवरी स्थान पर नहीं भेजा जा सकता।</string>
+    <string name="emputy" />
 </resources>

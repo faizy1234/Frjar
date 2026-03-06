@@ -50,9 +50,9 @@ import com.example.frjarcustomer.ui.theme.Screen_background_Root
 
 @Composable
 fun VersionExpireScreen(
-    onUpdateClick: () -> Unit,
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onUpdateClick: (String) -> Unit = {},
     isForceUpdate: Boolean = false,
     viewModel: SplashViewModel,
     moveToOnboarding: (OnboardingData) -> Unit = {},
@@ -62,6 +62,7 @@ fun VersionExpireScreen(
     ) {
 
     val isLoading by viewModel.isDataLoaded.collectAsStateWithLifecycle()
+    val localizedMessage = viewModel.essentialAppSetting.collectAsStateWithLifecycle()
 
     val showNoConnection by viewModel.showNoConnection.collectAsStateWithLifecycle()
 
@@ -112,23 +113,27 @@ fun VersionExpireScreen(
                         .padding(horizontal = 41.sdp)
                 )
                 Spacer(modifier = Modifier.height(10.sdp))
+                localizedMessage.value.appUpdateMessageLocalized?.let {
+                    GenericText(
+                        text = it,
+                        color = TextOnLightgray.copy(0.60f),
+                        fontSize = 10.ssp,
+                        fontWeight = FontWeight.W400,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .padding(horizontal = 33.sdp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.sdp),
+                        textAlign = TextAlign.Center
+                    )
+                }
 
-                GenericText(
-                    text = resourceString(R.string.this_version_will_expire_on_todayplease_go_to_the_app_store_to_update_it),
-                    color = TextOnLightgray.copy(0.60f),
-                    fontSize = 10.ssp,
-                    fontWeight = FontWeight.W400,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .padding(horizontal = 33.sdp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.sdp),
-                    textAlign = TextAlign.Center
-                )
 
                 Spacer(modifier = Modifier.height(36.sdp))
                 GenericButton(
-                    onClick = onUpdateClick,
+                    onClick = {
+                        localizedMessage.value.androidCustomerUrl?.let { onUpdateClick.invoke(it) }
+                    },
                     backgroundColor = ButtonPrimary,
                     modifier = Modifier
                         .padding(horizontal = 82.sdp)

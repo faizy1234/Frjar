@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.frjarcustomer.data.local.datastore.AppDataStore
 import com.example.frjarcustomer.data.local.datastore.PreferencesKeys
+import com.example.frjarcustomer.data.remote.model.appSetting.EssentialAppSetting
 import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.OnboardingData
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
@@ -13,9 +14,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +37,16 @@ class SplashViewModel @Inject constructor(
     private val repository: Repository
 
 ) : ViewModel() {
+    private val _essentialAppSetting =
+        MutableStateFlow(EssentialAppSetting())
+
+    val essentialAppSetting: StateFlow<EssentialAppSetting> =
+        _essentialAppSetting
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = EssentialAppSetting()
+            )
 
     private val _destination = MutableSharedFlow<SplashDestination>(
         replay = 1
@@ -55,7 +70,6 @@ class SplashViewModel @Inject constructor(
         _showNoConnection.value = false
         startSplashFlow()
     }
-
 
 
     private fun startSplashFlow() {
@@ -123,7 +137,18 @@ class SplashViewModel @Inject constructor(
             repository.getCustomerAppSetting().collect { result ->
                 when (result) {
                     is ApiResult.Success -> {
-                        isAndroidMaintenanceMode = result.data.data?.androidMaintainaceMode == true
+                        val appSettingData = result.data.data
+                        _essentialAppSetting.update {
+                            it.copy(
+                                contactNo = appSettingData?.customerSupportNo,
+                                maintenanceMessageLocalized = appSettingData?.maintenanceMessageLocalized,
+                                appUpdateMessageLocalized = appSettingData?.appUpdateMessageLocalized,
+                                androidCustomerUrl = appSettingData?.androidCustomerUrl
+
+                            )
+                        }
+                        isAndroidMaintenanceMode = appSettingData?.androidMaintainaceMode == true
+
                         getAppVersionInfo()
                     }
 

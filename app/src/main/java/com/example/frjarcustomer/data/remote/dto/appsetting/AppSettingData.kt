@@ -1,5 +1,7 @@
 package com.example.frjarcustomer.data.remote.dto.appsetting
 
+import com.example.frjarcustomer.data.remote.utils.AppLanguage
+import com.example.frjarcustomer.utils.LocaleManager
 import com.google.gson.annotations.SerializedName
 
 data class AppSettingData(
@@ -32,6 +34,8 @@ data class AppSettingData(
     @SerializedName("equipment_sale_allow_order") val equipmentSaleAllowOrder: Boolean? = null,
     @SerializedName("app_update_message_ar") val appUpdateMessageAr: String? = null,
     @SerializedName("app_update_message_en") val appUpdateMessageEn: String? = null,
+    @SerializedName("app_update_message_hi") val appUpdateMessageHi: String? = null,
+    @SerializedName("app_update_message_ur") val appUpdateMessageUr: String? = null,
     @SerializedName("ios_app_url") val iosAppUrl: String? = null,
     @SerializedName("android_provider_url") val androidProviderUrl: String? = null,
     @SerializedName("android_customer_url") val androidCustomerUrl: String? = null,
@@ -39,6 +43,8 @@ data class AppSettingData(
     @SerializedName("ios_customer_url") val iosCustomerUrl: String? = null,
     @SerializedName("app_maintenance_message_ar") val appMaintenanceMessageAr: String? = null,
     @SerializedName("app_maintenance_message_en") val appMaintenanceMessageEn: String? = null,
+    @SerializedName("app_maintenance_message_hi") val appMaintenanceMessageHi: String? = null,
+    @SerializedName("app_maintenance_message_ur") val appMaintenanceMessageUr: String? = null,
     @SerializedName("aws_secret_key") val awsSecretKey: String? = null,
     @SerializedName("aws_access_key") val awsAccessKey: String? = null,
     @SerializedName("android_app_url") val androidAppUrl: String? = null,
@@ -109,4 +115,26 @@ data class AppSettingData(
     @SerializedName("video") val video: VideoDto? = null,
     @SerializedName("feature_companies") val featureCompanies: List<FeatureCompanyItem>? = null,
     @SerializedName("default_address") val defaultAddress: DefaultAddressDto? = null
-)
+){
+    val maintenanceMessageLocalized: String
+        get() = (when (LocaleManager.currentLanguage) {
+            AppLanguage.ARABIC.value -> appMaintenanceMessageAr ?: appMaintenanceMessageEn
+            AppLanguage.HINDI.value -> appMaintenanceMessageHi ?: appMaintenanceMessageEn
+            AppLanguage.URDU.value -> appMaintenanceMessageUr ?: appMaintenanceMessageEn
+            AppLanguage.ENGLISH.value -> appMaintenanceMessageEn
+            null -> appMaintenanceMessageEn
+            else -> appMaintenanceMessageEn
+        } ?: "")
+
+    val appUpdateMessageLocalized: String
+        get() = (when (LocaleManager.currentLanguage) {
+            AppLanguage.ARABIC.value -> appUpdateMessageAr ?: appUpdateMessageEn
+            AppLanguage.HINDI.value -> appUpdateMessageHi ?: appUpdateMessageEn
+            AppLanguage.URDU.value -> appUpdateMessageUr ?: appUpdateMessageEn
+            AppLanguage.ENGLISH.value -> appUpdateMessageEn
+            null -> appUpdateMessageEn
+            else -> appUpdateMessageEn
+        } ?: "")
+
+
+}

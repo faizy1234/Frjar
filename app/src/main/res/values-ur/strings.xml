@@ -3,6 +3,7 @@
     <string name="english">English</string>
 
     <string name="lets_get_started_with_frjar">آئیے فرجار کے ساتھ شروع کریں</string>
+    <string name="auth">آتھ</string>
     <string name="login">لاگ ان</string>
     <string name="sign_up">سائن اپ</string>
     <string name="mobile_number">موبائل نمبر</string>
@@ -18,6 +19,13 @@
     <string name="email_or_mobile">ای میل یا موبائل</string>
     <string name="password">پاس ورڈ</string>
     <string name="forgot_password">پاس ورڈ بھول گئے؟</string>
+    <string name="continue_">جاری رکھیں</string>
+    <string name="enter_the_6digit_otp">6 ہندسوں کا OTP درج کریں</string>
+    <string name="example_email">example@gmail.com</string>
+    <string name="input_your_password_account">اپنا پاس ورڈ درج کریں</string>
+    <string name="show">دکھائیں</string>
+    <string name="hide">چھپائیں</string>
+    <string name="mobile_number_placeholder">552344354</string>
     <string name="ready_to_secure_your_account">کیا آپ اپنا اکاؤنٹ محفوظ کرنے کے لیے تیار ہیں؟</string>
     <string name="email">ای میل</string>
     <string name="optional">(اختیاری)</string>
@@ -701,4 +709,5 @@
     <string name="some_of_the_products_cannot_be_delivered_at_the_selected_address">کچھ مصنوعات منتخب پتے پر ڈیلیور نہیں کی جا سکتیں</string>
     <string name="please_update_your_name">براہِ کرم اپنا نام اپ ڈیٹ کریں</string>
     <string name="this_item_cannot_be_shipped_to_your_selected_delivery_location">یہ آئٹم آپ کے منتخب کردہ ڈیلیوری مقام پر نہیں بھیجا جا سکتا۔</string>
+    <string name="emputy" />
 </resources>

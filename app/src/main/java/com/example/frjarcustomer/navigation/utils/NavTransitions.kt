@@ -1,4 +1,4 @@
-package com.example.frjarcustomer.navigation
+package com.example.frjarcustomer.navigation.utils
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition

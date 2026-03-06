@@ -8,8 +8,8 @@ import com.example.frjarcustomer.data.local.datastore.AppDataStore
 import com.example.frjarcustomer.data.local.datastore.PreferencesKeys
 import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.OnboardingData
 import com.example.frjarcustomer.data.remote.repository.Repository
-import com.example.frjarcustomer.navigation.AppRoute
-import com.example.frjarcustomer.navigation.CustomNavType
+import com.example.frjarcustomer.navigation.routes.AppRoute
+import com.example.frjarcustomer.navigation.utils.CustomNavType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

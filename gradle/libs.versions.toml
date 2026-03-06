@@ -26,8 +26,10 @@ material3 = "1.4.0"
 firebaseBom = "34.0.0"
 googleServices = "4.4.4"
 firebaseCrashlytics = "3.0.1"
+runtime = "1.10.4"
 
 [libraries]
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -75,6 +77,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

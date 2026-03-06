@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onFirstVisible
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -92,9 +93,9 @@ fun OnboardingPageContent(
             animateDescription = false
 
             animateImage = true
-            delay(500)
+            delay(200)
             animateTitle = true
-            delay(500)
+            delay(200)
             animateDescription = true
         }
 
@@ -114,7 +115,7 @@ fun OnboardingPageContent(
                 enter = slideInVertically(
                     animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
                     initialOffsetY = { -it }
-                ) + fadeIn(tween(1000))
+                ) + fadeIn(tween(400))
             ) {
                 CoilImage(
                     url = image,
@@ -142,7 +143,7 @@ fun OnboardingPageContent(
                             stiffness = Spring.StiffnessVeryLow
                         ),
                         initialOffsetX = { -it }
-                    ) + fadeIn(tween(1000))
+                    ) + fadeIn(tween(400))
                 ) {
                     GenericText(
                         text = title,
@@ -167,7 +168,7 @@ fun OnboardingPageContent(
                             stiffness = Spring.StiffnessVeryLow
                         ),
                         initialOffsetX = { -it }
-                    ) + fadeIn(tween(1000))
+                    ) + fadeIn(tween(400))
                 ) {
 
                     GenericText(
@@ -203,7 +204,6 @@ fun CarouselScreen(
         modifier = modifier
             .fillMaxSize()
             .background(White)
-            .padding(bottom = safeAreaPadding.calculateBottomPadding())
     ) {
 
         HorizontalPager(
@@ -217,9 +217,13 @@ fun CarouselScreen(
         }
         Column(
             modifier = Modifier
+                .padding(bottom = 35.sdp)
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .systemBarsPadding(),
+
+                .padding(bottom = safeAreaPadding.calculateBottomPadding())
+            ,
+
 //                .padding(horizontal = 24.sdp, vertical = 20.sdp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

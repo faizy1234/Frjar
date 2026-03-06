@@ -5,6 +5,7 @@
     <!-- Startup Flow -->
     <string name="lets_get_started_with_frjar">Let\'s get started with Frjar</string>
     <string name="login">Login</string>
+    <string name="auth">Auth</string>
     <string name="sign_up">Sign up</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="login_with_otp">Login with OTP</string>
@@ -19,6 +20,13 @@
     <string name="email_or_mobile">Email or Mobile</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="continue_">Continue</string>
+    <string name="enter_the_6digit_otp">Enter the 6-digit OTP</string>
+    <string name="example_email">example@gmail.com</string>
+    <string name="input_your_password_account">Input your password account</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
+    <string name="mobile_number_placeholder">552344354</string>
     <string name="ready_to_secure_your_account">Ready to Secure Your Account?</string>
     <string name="email">Email</string>
     <string name="optional">( optional )</string>
@@ -737,4 +745,5 @@
     <string name="http_error">HTTP error occurred</string>
     <string name="optimizing_media_message">Optimizing your media before send...</string>
     <string name="please_wait_compression_in_progress">Please wait, compression is in progress...</string>
+    <string name="emputy" />
 </resources>

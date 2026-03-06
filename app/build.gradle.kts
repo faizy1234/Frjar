@@ -49,6 +49,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -91,6 +92,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.runtime)
     ksp(libs.hilt.compiler)
     // Room
     implementation(libs.room.runtime)
@@ -126,5 +128,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     //Sdp for responsive
     implementation(libs.sdp.ssp.compose.multiplatform)
+
+    //material 3 extented icons
+    implementation(libs.androidx.compose.material.icons.extended)
+
+    //map
+    implementation("com.google.maps.android:maps-compose:4.3.3")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+
 
 }

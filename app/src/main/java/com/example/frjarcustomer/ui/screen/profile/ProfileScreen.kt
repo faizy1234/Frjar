@@ -13,29 +13,4 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-@Composable
-fun ProfileScreen(
-    userId: String,
-    tab: Int,
-    onNavigateBack: () -> Unit,
-    viewModel: ProfileViewModel = hiltViewModel()
-) {
-    val id = viewModel.userId.ifEmpty { userId }
-    val tabIndex = viewModel.tab
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Profile: $id (tab $tabIndex)",
-            style = MaterialTheme.typography.titleLarge
-        )
-        Button(onClick = onNavigateBack) {
-            Text("Back")
-        }
-    }
-}

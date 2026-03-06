@@ -41,7 +41,7 @@ fun GenericButton(
     disabledContentColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
     border: BorderStroke? = null,
     shape: Shape = RoundedCornerShape(6.sdp),
-    elevation: Dp = 3.dp,
+    elevation: Dp = 0.dp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
@@ -53,7 +53,7 @@ fun GenericButton(
 
     Box(
         modifier = modifier
-            .shadow(elevation, shape, clip = true)
+            .shadow(elevation, shape, clip = true,)
             .clip(shape)
             .background(containerColor)
             .then(

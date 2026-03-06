@@ -2,9 +2,13 @@ package com.example.frjarcustomer.appstate
 
 import android.content.Context
 import android.content.res.Configuration
+import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.text.TextUtilsCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.util.Locale
 
@@ -25,7 +29,6 @@ val LocalPaddingValues = compositionLocalOf<PaddingValues> {
 fun LanguageAwareComponent(
     viewModel: MainActivityVm,
     activityContext: Context,
-    paddingValues: PaddingValues,
     content: @Composable () -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -44,10 +47,20 @@ fun LanguageAwareComponent(
         resourceContext = activityContext.createConfigurationContext(newConfig)
     }
 
+
+
+    val layoutDirection = remember(currentLanguage) {
+        if (TextUtilsCompat.getLayoutDirectionFromLocale(Locale(currentLanguage.languageCode)) == View.LAYOUT_DIRECTION_RTL) {
+            LayoutDirection.Rtl
+        } else {
+            LayoutDirection.Ltr
+        }
+    }
+
     CompositionLocalProvider(
         LocalResourceContext provides resourceContext,
         LocalCurrentLanguage provides currentLanguage,
-        LocalPaddingValues provides paddingValues,
+        LocalLayoutDirection provides layoutDirection
     ) {
         content()
     }

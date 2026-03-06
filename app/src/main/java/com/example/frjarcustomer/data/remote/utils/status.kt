@@ -10,3 +10,14 @@ enum class AppUpdateStatus(val value: String) {
             entries.find { it.value == value?.trim() } ?: RecommendedUpdate
     }
 }
+
+
+
+enum class AppLanguage(val value: String){
+    ENGLISH("en"),
+    ARABIC("ar"),
+    HINDI("hi"),
+    URDU("ur")
+
+
+}

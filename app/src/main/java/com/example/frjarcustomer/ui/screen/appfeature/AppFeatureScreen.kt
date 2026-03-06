@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.example.frjarcustomer.R
@@ -44,11 +45,11 @@ import network.chaintech.sdpcomposemultiplatform.ssp
 
 @Composable
 fun AppFeatureScreen(
-    onContactClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onContactClick: (String?) -> Unit = {},
     viewModel: SplashViewModel,
-    modifier: Modifier = Modifier
 ) {
-
+    val localizedMessage = viewModel.essentialAppSetting.collectAsStateWithLifecycle()
 
     Box(
         modifier = modifier
@@ -73,7 +74,7 @@ fun AppFeatureScreen(
             CoilImage(
                 url = R.drawable.ic_service_person,
                 contentDescription = null,
-                modifier = Modifier.size(width = 91.sdp,height = 110.sdp),
+                modifier = Modifier.size(width = 91.sdp, height = 110.sdp),
             )
             Spacer(modifier = Modifier.height(31.sdp))
 
@@ -82,33 +83,48 @@ fun AppFeatureScreen(
                 color = ButtonSecondary,
                 fontSize = 15.ssp,
                 fontWeight = FontWeight.W500,
-                style =MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 40.sdp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(horizontal = 40.sdp)
+                    .fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.sdp))
-            GenericText(
-                text = resourceString(R.string.we_have_added_new_features__fixed_bugs_to_make_your_experience_smooth_as_possible),
-                color = TextOnLightgray.copy(0.60f),
-                fontSize = 10.ssp,
-                fontWeight = FontWeight.W400,
-                style =MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 33.sdp).fillMaxWidth().padding(horizontal = 20.sdp),
-                textAlign = TextAlign.Center
-            )
+            localizedMessage.value.maintenanceMessageLocalized?.let {
+                GenericText(
+                    text = it,
+                    color = TextOnLightgray.copy(0.60f),
+                    fontSize = 10.ssp,
+                    fontWeight = FontWeight.W400,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(horizontal = 33.sdp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.sdp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
             Spacer(modifier = Modifier.height(23.sdp))
             GenericButton(
-                onClick = onContactClick,
+                onClick = {
+                    onContactClick.invoke(
+                        localizedMessage.value.contactNo
+                    )
+                },
                 backgroundColor = ButtonPrimary,
-                modifier = Modifier.padding(horizontal = 82.sdp).fillMaxWidth().height(44.sdp),
+                modifier = Modifier
+                    .padding(horizontal = 82.sdp)
+                    .fillMaxWidth()
+                    .height(44.sdp),
 
-            ) {
+                ) {
                 GenericText(
                     text = resourceString(R.string.contact),
-                    color =TextOnAccent ,
+                    color = TextOnAccent,
                     fontSize = 12.ssp,
                     fontWeight = FontWeight.W500,
-                    )
+                )
             }
         }
     }

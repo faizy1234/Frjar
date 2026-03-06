@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
+
 fun GenericText(
     text: String,
     modifier: Modifier = Modifier,

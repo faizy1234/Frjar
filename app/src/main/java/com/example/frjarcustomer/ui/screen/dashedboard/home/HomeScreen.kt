@@ -1,4 +1,4 @@
-package com.example.frjarcustomer.ui.screen.home
+package com.example.frjarcustomer.ui.screen.dashedboard.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.frjarcustomer.R
+import com.example.frjarcustomer.appstate.resourceString
 
 @Composable
 fun HomeScreen(
@@ -21,7 +23,9 @@ fun HomeScreen(
     onNavigateToProfile: (userId: String, tab: Int) -> Unit,
     onNavigateToAppFeature: () -> Unit = {},
     onNavigateToVersionExpire: () -> Unit = {},
-    onNavigateToNoConnection: () -> Unit = {}
+    onNavigateToNoConnection: () -> Unit = {},
+
+    onNavigateToAuth: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -30,17 +34,8 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Welcome to home screen",
-            style = MaterialTheme.typography.titleMedium
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { onNavigateToDetail("item-1") }) {
-            Text("Open Detail (item-1)")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = { onNavigateToProfile("user-1", 0) }) {
-            Text("Open Profile")
+        Button(onClick = onNavigateToAuth) {
+            Text(resourceString(R.string.auth))
         }
         Spacer(modifier = Modifier.height(12.dp))
         Button(onClick = onNavigateToAppFeature) {

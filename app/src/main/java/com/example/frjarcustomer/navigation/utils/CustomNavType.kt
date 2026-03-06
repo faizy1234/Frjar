@@ -1,4 +1,4 @@
-package com.example.frjarcustomer.navigation
+package com.example.frjarcustomer.navigation.utils
 
 import android.net.Uri
 import android.os.Build
@@ -18,7 +18,7 @@ class CustomNavType<T : Parcelable>(
     }
 
     override fun get(bundle: Bundle, key: String): T? {
-        return if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
+        return if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU){
             bundle.getParcelable(key,clazz)
         }else{
             bundle.getParcelable(key)
@@ -27,10 +27,10 @@ class CustomNavType<T : Parcelable>(
     }
 
     override fun parseValue(value: String): T? {
-        return if (value == NULL) null else Json.decodeFromString(serializer, Uri.decode(value))
+        return if (value == NULL) null else Json.Default.decodeFromString(serializer, Uri.decode(value))
     }
     override fun serializeAsValue(value: T?): String {
-        return value?.let { Uri.encode(Json.encodeToString(serializer, it)) } ?: NULL
+        return value?.let { Uri.encode(Json.Default.encodeToString(serializer, it)) } ?: NULL
     }
     override fun put(bundle: Bundle, key: String, value: T?) {
         bundle.putParcelable(key,value)

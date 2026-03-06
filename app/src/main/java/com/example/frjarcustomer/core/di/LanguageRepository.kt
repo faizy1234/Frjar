@@ -6,6 +6,7 @@ import com.example.frjarcustomer.data.local.datastore.AppDataStore
 import com.example.frjarcustomer.data.local.datastore.PreferencesKeys
 import com.example.frjarcustomer.data.local.datastore.getObjectFlow
 import com.example.frjarcustomer.data.local.datastore.putObject
+import com.example.frjarcustomer.utils.LocaleManager
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +38,7 @@ class LanguageRepository @Inject constructor(
                 .catch { _currentLanguage.value = AppLanguage.DEFAULT }
                 .collect { lang ->
                     val resolved = lang ?: AppLanguage.DEFAULT
+                    LocaleManager.init(resolved.languageCode)
                     _currentLanguage.value = resolved
                     sessionManager.setLanguageInMemory(resolved.languageCode)
                 }

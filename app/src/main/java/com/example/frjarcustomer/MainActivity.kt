@@ -8,9 +8,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
@@ -19,46 +20,59 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.frjarcustomer.appstate.AppLanguage
+import com.example.frjarcustomer.appstate.FrjarBottomAppBar
 import com.example.frjarcustomer.appstate.LanguageAwareComponent
+import com.example.frjarcustomer.appstate.LocalPaddingValues
 import com.example.frjarcustomer.appstate.MainActivityVm
-import com.example.frjarcustomer.navigation.AppNavGraph
+import com.example.frjarcustomer.navigation.mainNavhost.AppNavGraph
+import com.example.frjarcustomer.navigation.utils.TopLevelDestination
 import com.example.frjarcustomer.ui.theme.FrjarTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainActivityVm: MainActivityVm by viewModels()
 
-    private val requestNotificationPermission = registerForActivityResult(RequestPermission()) { _ -> }
+    private val requestNotificationPermission =
+        registerForActivityResult(RequestPermission()) { _ -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-        requestNotificationPermissionIfNeeded()
         enableEdgeToEdge()
         setContent {
-            val currentLanguage by mainActivityVm.currentLanguage.collectAsStateWithLifecycle(initialValue = AppLanguage.DEFAULT)
+            val currentLanguage by mainActivityVm.currentLanguage.collectAsStateWithLifecycle(
+                initialValue = AppLanguage.DEFAULT
+            )
             FrjarTheme(currentLanguage = currentLanguage) {
                 val navController = rememberNavController()
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = Color.Transparent,
-                ) { innerPadding ->
+                val topLevelDestination = listOf(
+                    TopLevelDestination.HomeScreenNavigationRoute,
+                    TopLevelDestination.CollectionScreenNavigationRoute,
+                    TopLevelDestination.FavoritesScreenNavigationRoute,
+                    TopLevelDestination.SettingsScreenNavigationRoute
+                )
 
-                    LanguageAwareComponent(
-                        viewModel = mainActivityVm,
-                        activityContext = this@MainActivity,
-                        paddingValues = innerPadding
-                    ) {
-
-                        AppNavGraph(
-                            navController = navController,
-                            modifier = Modifier
-                                .fillMaxSize()
-                        )
+                LanguageAwareComponent(
+                    viewModel = mainActivityVm,
+                    activityContext = this@MainActivity,
+                ) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        containerColor = Color.Transparent,
+                        bottomBar = {
+                            FrjarBottomAppBar(navController = navController, topLevelDestination)
+                        }
+                    ) { innerPadding ->
+                        CompositionLocalProvider(LocalPaddingValues provides innerPadding) {
+                            AppNavGraph(
+                                navController = navController,
+                                modifier = Modifier.fillMaxSize(),
+                                onRequestNotificationPermission = { requestNotificationPermissionIfNeeded() }
+                            )
+                        }
                     }
                 }
 
