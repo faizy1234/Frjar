@@ -30,6 +30,7 @@ import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.ui.theme.AuthBorderNew
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
+import com.example.frjarcustomer.ui.theme.TextGreyscale500
 import com.example.frjarcustomer.ui.theme.White
 import network.chaintech.sdpcomposemultiplatform.sdp
 import network.chaintech.sdpcomposemultiplatform.ssp
@@ -115,8 +116,8 @@ fun ContactInfoRow(
             Spacer(modifier = Modifier.height(2.dp))
             GenericText(
                 text =  item.subtitle,
-                color = TextSecondary,
-                fontSize = 12.sp,
+                color = TextGreyscale500,
+                fontSize = 10.ssp,
                 fontWeight = FontWeight.Normal,
                 lineHeight = 18.sp
             )
@@ -142,20 +143,20 @@ fun OrDivider(modifier: Modifier = Modifier) {
     ) {
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = TextTertiary,
+            color = TextGreyscale500,
             thickness = 1.dp
         )
         GenericText(
-            text = "OR",
-            modifier = Modifier.padding(horizontal = 12.dp),
-            color = TextTertiary,
-            fontSize = 13.sp,
+            text = resourceString(R.string.or),
+            modifier = Modifier.padding(horizontal = 13.sdp),
+            color = TextGreyscale500,
+            fontSize = 10.ssp,
             fontWeight = FontWeight.Medium,
             letterSpacing = 1.sp
         )
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = TextTertiary,
+            color = TextGreyscale500,
             thickness = 1.dp
         )
     }
