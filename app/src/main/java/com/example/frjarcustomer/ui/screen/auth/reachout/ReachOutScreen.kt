@@ -1,6 +1,5 @@
 package com.example.frjarcustomer.ui.screen.auth.reachout
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,13 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.GenericText
 import com.example.frjarcustomer.ui.theme.TextBlackDarkTitle
-import com.example.frjarcustomer.ui.theme.TextSecondary
-import com.example.frjarcustomer.ui.theme.TextTertiary
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.LocalPaddingValues
@@ -32,8 +26,9 @@ import com.example.frjarcustomer.ui.components.ContactInfoRow
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.ImageGalleryRow
 import com.example.frjarcustomer.ui.components.OrDivider
-import com.example.frjarcustomer.ui.theme.AuthBorderNew
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
+import com.example.frjarcustomer.ui.theme.DarkNavyBlue
+import com.example.frjarcustomer.ui.theme.TextGreyscale500
 import network.chaintech.sdpcomposemultiplatform.sdp
 import network.chaintech.sdpcomposemultiplatform.ssp
 
@@ -50,24 +45,23 @@ fun ReachOutScreen(
 
     val safeAreaPadding = LocalPaddingValues.current
 
-
     val contactItems = listOf(
         ContactInfoItem(
-            iconRes = R.drawable.ic_phone,
-            title = "+966126053950",
-            subtitle = "",
+            iconRes = R.drawable.ic_dialer,
+            title = resourceString(R.string._966126053950),
+            subtitle = resourceString(R.string.reach_us_out_and_ask_questions),
             onClick = onPhoneClick
         ),
         ContactInfoItem(
-            iconRes = R.drawable.ic_launcher_foreground,
-            title = "King Abdulaziz Branch Rd, Ash Shati",
-            subtitle = "",
+            iconRes = R.drawable.ic_location,
+            title = resourceString(R.string.king_abdulaziz_branch_rd_ash_shati),
+            subtitle = resourceString(R.string.tap_to_view_on_google_maps),
             onClick = onLocationClick
         ),
         ContactInfoItem(
-            iconRes = R.drawable.ic_phone,
-            title = "Language",
-            subtitle = "English",
+            iconRes = R.drawable.ic_language,
+            title = resourceString(R.string.language),
+            subtitle = resourceString(R.string.english),
             onClick = onLanguageClick
         )
     )
@@ -93,7 +87,7 @@ fun ReachOutScreen(
 
                 Box(
                     modifier = Modifier
-                        .padding(start = 12.dp, top = 12.dp)
+                        .padding(start = 9.sdp, top = 9.sdp)
                         .size(35.sdp)
                         .clip(CircleShape)
                         .background(Color.White.copy(0.8f))
@@ -111,11 +105,11 @@ fun ReachOutScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(18.sdp))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 18.dp)
+                    .padding(horizontal = 14.sdp)
             ) {
             GenericText(
                 text = resourceString(R.string.reach_out_to_us),
@@ -125,7 +119,7 @@ fun ReachOutScreen(
                 fontWeight = FontWeight.SemiBold,
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(15.sdp))
 
 
             contactItems.forEach{  item ->
@@ -134,11 +128,11 @@ fun ReachOutScreen(
             }
 
 
-            Spacer(modifier = Modifier.height(28.dp))
+//            Spacer(modifier = Modifier.height(10.dp))
 
             OrDivider()
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(18.sdp))
 
             GenericButton(
                 onClick = onCreateAccountClick,
@@ -157,30 +151,30 @@ fun ReachOutScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(18.dp))
+            Spacer(modifier = Modifier.height(14.sdp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 GenericText(
-                    text = "Already a member? ",
-                    color = TextSecondary,
-                    fontSize = 14.sp,
+                    text = resourceString(R.string.already_a_member),
+                    color = TextGreyscale500,
+                    fontSize = 11.ssp,
                     fontWeight = FontWeight.Normal
                 )
                 GenericText(
-                    text = "Sign In",
-                    color = TextBlackDarkTitle,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    text = resourceString(R.string.sign_in),
+                    color = DarkNavyBlue,
+                    fontSize = 11.ssp,
+                    fontWeight = FontWeight.Normal,
                     modifier = Modifier.clickable { onSignInClick() }
                 )
             }
 
 
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(25.sdp))
         }
         }
     }
