@@ -15,6 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.frjarcustomer.R
+import com.example.frjarcustomer.appstate.MessageContent
+import com.example.frjarcustomer.appstate.MessageType
+import com.example.frjarcustomer.appstate.SnackbarController
+import com.example.frjarcustomer.appstate.SnackbarDuration
+import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.appstate.resourceString
 
 @Composable
@@ -38,7 +43,15 @@ fun HomeScreen(
             Text(resourceString(R.string.auth))
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToAppFeature) {
+        Button(onClick ={
+            SnackbarController.show(
+                SnackbarModel(
+                    type = MessageType.SUCCESS,
+                    message = MessageContent.PlainString("Copied to clipboard"),
+                    duration = SnackbarDuration.SHORT
+                )
+            )
+        }) {
             Text("New Features")
         }
         Spacer(modifier = Modifier.height(12.dp))

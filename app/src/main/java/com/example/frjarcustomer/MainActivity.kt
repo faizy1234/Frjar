@@ -8,12 +8,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
@@ -24,10 +30,14 @@ import com.example.frjarcustomer.appstate.FrjarBottomAppBar
 import com.example.frjarcustomer.appstate.LanguageAwareComponent
 import com.example.frjarcustomer.appstate.LocalPaddingValues
 import com.example.frjarcustomer.appstate.MainActivityVm
+import com.example.frjarcustomer.appstate.SnackbarController
+import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.navigation.mainNavhost.AppNavGraph
+import com.example.frjarcustomer.ui.components.AnimatableSnackbar
 import com.example.frjarcustomer.navigation.utils.TopLevelDestination
 import com.example.frjarcustomer.ui.theme.FrjarTheme
 import dagger.hilt.android.AndroidEntryPoint
+import network.chaintech.sdpcomposemultiplatform.sdp
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -59,20 +69,32 @@ class MainActivity : ComponentActivity() {
                     viewModel = mainActivityVm,
                     activityContext = this@MainActivity,
                 ) {
+                    val currentSnackbar by SnackbarController.current.collectAsStateWithLifecycle(initialValue = null)
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         containerColor = Color.Transparent,
+                        topBar = {
+                            Column(modifier = Modifier.wrapContentSize()) {
+                                Spacer(Modifier.height(25.sdp))
+                                AnimatableSnackbar(
+                                    snackbarModel = currentSnackbar,
+                                    onSnackbarDismiss = { SnackbarController.dismiss() }
+                                )
+                            }
+                        },
                         bottomBar = {
                             FrjarBottomAppBar(navController = navController, topLevelDestination)
                         }
                     ) { innerPadding ->
-                        CompositionLocalProvider(LocalPaddingValues provides innerPadding) {
-                            AppNavGraph(
-                                navController = navController,
-                                modifier = Modifier.fillMaxSize(),
-                                onRequestNotificationPermission = { requestNotificationPermissionIfNeeded() }
-                            )
-                        }
+                            CompositionLocalProvider(LocalPaddingValues provides innerPadding) {
+                                AppNavGraph(
+                                    navController = navController,
+                                    modifier = Modifier.fillMaxSize(),
+                                    onRequestNotificationPermission = { requestNotificationPermissionIfNeeded() }
+                                )
+                            }
+
+
                     }
                 }
 
