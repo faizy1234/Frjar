@@ -28,7 +28,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.graphicsLayer
@@ -44,6 +47,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.ui.theme.AuthBorder
@@ -57,6 +63,7 @@ import com.example.frjarcustomer.ui.theme.White
 import com.example.frjarcustomer.ui.util.dpScaled
 import network.chaintech.sdpcomposemultiplatform.sdp
 import network.chaintech.sdpcomposemultiplatform.ssp
+import kotlin.math.roundToInt
 
 @Composable
 fun AuthToggle(
@@ -68,89 +75,98 @@ fun AuthToggle(
     val shape = RoundedCornerShape(12.sdp)
     val innerShape = RoundedCornerShape(8.sdp)
 
-    val springSpec = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessMedium
-    )
-
-    Row(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dpScaled())
             .clip(shape)
             .background(White)
-            .padding(6.dpScaled()),
-        horizontalArrangement = Arrangement.spacedBy(4.sdp)
+            .padding(6.dpScaled())
     ) {
-        titles.forEachIndexed { index, title ->
+        val totalWidth = maxWidth
+        val tabCount = titles.size
+        val gapTotal = 4.sdp * (tabCount - 1)
+        val tabWidth = (totalWidth - gapTotal) / tabCount
 
-            val scale by animateFloatAsState(
-                targetValue = if (index == selectedIndex) 1f else 1f,
-                animationSpec = springSpec,
-                label = "scale_$index"
-            )
+        val tabWidthPx = with(LocalDensity.current) { tabWidth.toPx() }
+        val gapPx = with(LocalDensity.current) { 4.sdp.toPx() }
+        val stepPx = tabWidthPx + gapPx
 
-            var isPressed by remember { mutableStateOf(false) }
-            val pressScale by animateFloatAsState(
-                targetValue = if (isPressed) 0.93f else 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessHigh
-                ),
-                label = "press_$index"
-            )
+        val indicatorOffset by animateFloatAsState(
+            targetValue = selectedIndex * stepPx,
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = FastOutSlowInEasing
+            ),
+            label = "indicator_offset"
+        )
 
-            val backgroundAlpha by animateFloatAsState(
-                targetValue = if (index == selectedIndex) 1f else 0f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioNoBouncy,
-                    stiffness = Spring.StiffnessMediumLow
-                ),
-                label = "bg_alpha_$index"
-            )
+        // Sliding background indicator
+        Box(
+            modifier = Modifier
+                .width(tabWidth)
+                .height(44.dpScaled())
+                .offset { IntOffset(x = indicatorOffset.roundToInt(), y = 0) }
+                .clip(innerShape)
+                .background(TextPrimary)
+        )
 
-            val textColor by animateColorAsState(
-                targetValue = if (index == selectedIndex) White else TextPrimary,
-                animationSpec = tween(durationMillis = 200),
-                label = "text_color_$index"
-            )
+        // Tabs on top
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(4.sdp)
+        ) {
+            titles.forEachIndexed { index, title ->
 
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(44.dpScaled())
-                    .graphicsLayer {
-                        scaleX = pressScale
-                        scaleY = pressScale
-                    }
-                    .clip(innerShape)
-
-                    .background(TextPrimary.copy(alpha = backgroundAlpha))
-                    .pointerInput(index) {
-                        detectTapGestures(
-                            onPress = {
-                                isPressed = true
-                                tryAwaitRelease()
-                                isPressed = false
-                            },
-                            onTap = {
-                                onTabSelected(index)
-                            }
-                        )
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                GenericText(
-                    text = title,
-                    color = textColor,
-                    fontSize = 13.ssp,
-                    style = MaterialTheme.typography.headlineMedium
+                var isPressed by remember { mutableStateOf(false) }
+                val pressScale by animateFloatAsState(
+                    targetValue = if (isPressed) 0.93f else 1f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessHigh
+                    ),
+                    label = "press_$index"
                 )
+
+                val textColor by animateColorAsState(
+                    targetValue = if (index == selectedIndex) White else TextPrimary,
+                    animationSpec = tween(durationMillis = 150),
+                    label = "text_color_$index"
+                )
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(44.dpScaled())
+                        .graphicsLayer {
+                            scaleX = pressScale
+                            scaleY = pressScale
+                        }
+                        .clip(innerShape)
+                        .pointerInput(index) {
+                            detectTapGestures(
+                                onPress = {
+                                    isPressed = true
+                                    tryAwaitRelease()
+                                    isPressed = false
+                                },
+                                onTap = { onTabSelected(index) }
+                            )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    GenericText(
+                        text = title,
+                        color = textColor,
+                        fontSize = 11.ssp,
+                        fontWeight = FontWeight.SemiBold,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
             }
         }
     }
 }
-
 
 @Composable
 fun AuthTextField(
@@ -169,7 +185,7 @@ fun AuthTextField(
     showValidation: Boolean = false,
     prefixText: String? = null,
     isOptionalHeader: Boolean = false,
-    enabled: Boolean = false,
+    enabled: Boolean = true,
     onValidationChange: ((Boolean) -> Unit)? = null
 ) {
     val shape = RoundedCornerShape(8.dp)
