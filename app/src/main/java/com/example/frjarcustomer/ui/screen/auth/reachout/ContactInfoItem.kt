@@ -49,17 +49,19 @@ fun ReachOutScreen(
 ) {
 
     val safeAreaPadding = LocalPaddingValues.current
+
+
     val contactItems = listOf(
         ContactInfoItem(
             iconRes = R.drawable.ic_phone,
             title = "+966126053950",
-            subtitle = "Reach us out and ask questions",
+            subtitle = "",
             onClick = onPhoneClick
         ),
         ContactInfoItem(
             iconRes = R.drawable.ic_launcher_foreground,
             title = "King Abdulaziz Branch Rd, Ash Shati",
-            subtitle = "Tap to view on google maps",
+            subtitle = "",
             onClick = onLocationClick
         ),
         ContactInfoItem(

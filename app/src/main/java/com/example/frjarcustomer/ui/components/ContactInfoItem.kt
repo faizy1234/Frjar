@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +27,7 @@ import com.example.frjarcustomer.ui.theme.TextBlackDarkTitle
 import com.example.frjarcustomer.ui.theme.TextSecondary
 import com.example.frjarcustomer.ui.theme.TextTertiary
 import com.example.frjarcustomer.R
+import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.ui.theme.AuthBorderNew
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.White
@@ -112,7 +114,7 @@ fun ContactInfoRow(
             )
             Spacer(modifier = Modifier.height(2.dp))
             GenericText(
-                text = item.subtitle,
+                text =  item.subtitle,
                 color = TextSecondary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
