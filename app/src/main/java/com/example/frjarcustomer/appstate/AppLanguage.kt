@@ -9,7 +9,7 @@ data class AppLanguage(
     val localizedNameRes: Int,
 ) {
     companion object {
-         val DEFAULT = AppLanguage("ar", "Arabic",
+         val DEFAULT = AppLanguage("en", "English",
              R.string.english)
 
         val SUPPORTED = listOf(
