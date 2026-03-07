@@ -55,6 +55,7 @@ import com.example.frjarcustomer.ui.theme.AuthBorderNew
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.AuthTimerGreen
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
+import com.example.frjarcustomer.ui.theme.ButtonSecondary
 import com.example.frjarcustomer.ui.theme.InterFontFamily
 import com.example.frjarcustomer.ui.theme.TextBlackDark
 import com.example.frjarcustomer.ui.theme.TextBlackDarkTitle
@@ -230,12 +231,12 @@ private fun MethodSelectStep(
                 text = resourceString(R.string.forgot_password).replace("?", ""),
                 fontSize = 15.ssp,
                 fontWeight = FontWeight.W500,
-                color = TextPrimary,
+                color = TextBlackDarkTitle,
             )
             Spacer(modifier = Modifier.height(6.sdp))
             GenericText(
                 text = resourceString(R.string.select_verification_method_and_we_will_send_verification_code),
-                fontSize = 11.ssp,
+                fontSize = 12.ssp,
                 color = TextOnLightGray,
             )
             Spacer(modifier = Modifier.height(21.sdp))
@@ -304,12 +305,12 @@ private fun MethodCard(
         Column(modifier = Modifier.weight(1f)) {
             GenericText(
                 text = title,
-                fontSize = 11.ssp,
+                fontSize = 12.ssp,
                 color = TextBlackDarkTitle,
             )
             GenericText(
                 text = subtitle,
-                fontSize = 11.ssp,
+                fontSize = 12.ssp,
                 color = TextOnLightGray,
             )
         }
@@ -338,12 +339,12 @@ private fun InputEmailStep(
                     .fillMaxWidth()
                     .height(43.sdp),
                 backgroundColor = ButtonPrimary,
-                contentColor = TextOnAccent,
+                contentColor = ButtonSecondary,
                 content = {
                     GenericText(
                         text = resourceString(R.string.send_code),
                         fontSize = 12.ssp,
-                        color = TextOnAccent
+                        color = ButtonSecondary
                     )
                 }
             )
@@ -376,12 +377,12 @@ private fun InputEmailStep(
                 text = resourceString(R.string.reset_password),
                 fontSize = 15.ssp,
                 fontWeight = FontWeight.W500,
-                color = TextPrimary,
+                color = TextBlackDarkTitle,
             )
             Spacer(modifier = Modifier.height(6.sdp))
             GenericText(
                 text = resourceString(R.string.enter_your_email_we_will_send_a_verification_code_to_email),
-                fontSize = 11.ssp,
+                fontSize = 12.ssp,
                 color = TextOnLightGray
             )
             Spacer(modifier = Modifier.height(21.sdp))
@@ -430,12 +431,12 @@ private fun InputPhoneStep(
                     .fillMaxWidth()
                     .height(43.sdp),
                 backgroundColor = ButtonPrimary,
-                contentColor = TextOnAccent,
+                contentColor = ButtonSecondary,
                 content = {
                     GenericText(
                         text = resourceString(R.string.send_code),
                         fontSize = 12.ssp,
-                        color = TextOnAccent
+                        color = ButtonSecondary
                     )
                 }
             )
@@ -469,12 +470,12 @@ private fun InputPhoneStep(
                 text = resourceString(R.string.reset_password),
                 fontSize = 15.ssp,
                 fontWeight = FontWeight.W500,
-                color = TextPrimary,
+                color = TextBlackDarkTitle,
             )
             Spacer(modifier = Modifier.height(6.sdp))
             GenericText(
                 text = resourceString(R.string.enter_your_phone_number_we_will_send_a_verification_code),
-                fontSize = 11.ssp,
+                fontSize = 12.ssp,
                 color = TextOnLightGray
             )
 
