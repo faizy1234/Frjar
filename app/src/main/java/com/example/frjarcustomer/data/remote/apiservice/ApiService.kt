@@ -10,6 +10,7 @@ import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import com.example.frjarcustomer.data.remote.endpoints.Endpoints
 import com.example.frjarcustomer.data.remote.model.request.GenericBaseRequest
 import com.example.frjarcustomer.data.remote.model.request.UserRequest
+import com.google.android.gms.common.api.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -48,5 +49,10 @@ interface ApiService {
 
     @POST(Endpoints.USER_RESEND_OTP)
     suspend fun userResendOtp(@Body request: GenericBaseRequest): BaseResponse<OtpResendResponse>
+
+
+
+    @POST(Endpoints.REGISTER_WITH_PHONE)
+    suspend fun registerWithPhone(@Body request: GenericBaseRequest): BaseResponse<UserResponse>
 
 }

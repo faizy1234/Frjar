@@ -40,8 +40,9 @@ class RepositoryImp @Inject constructor(
         userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
+        firebaseToken = fcmRepository.getCurrentToken(),
         appVersion = appConfig.versionName.toDoubleOrNull(),
-        phone = phoneNumber
+        phone = if (phoneNumber != null) NUMBER_PREFIX + phoneNumber else null
     )
 
     private suspend fun createUserRequest(
@@ -121,7 +122,7 @@ class RepositoryImp @Inject constructor(
             languageProvider.getLanguageCode()
         ).ensureSuccessCode(languageProvider, stringProvider)
 
-    override suspend fun sendLoginOtp(phoneNumber: String?): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.user.UserResponse>>> =
+    override suspend fun sendLoginOtp(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>> =
         safeApiCall(
             ioDispatcher,
             { apiService.sendLoginOtp(createBaseRequest(phoneNumber)) },
@@ -167,6 +168,14 @@ class RepositoryImp @Inject constructor(
         safeApiCall(
             ioDispatcher,
             { apiService.userResendOtp(createBaseRequest(null)) },
+            stringProvider,
+            languageProvider.getLanguageCode()
+        ).ensureSuccessCode(languageProvider, stringProvider)
+
+    override suspend fun registerWithPhone(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>> =
+        safeApiCall(
+            ioDispatcher,
+            { apiService.registerWithPhone(createBaseRequest(phoneNumber)) },
             stringProvider,
             languageProvider.getLanguageCode()
         ).ensureSuccessCode(languageProvider, stringProvider)

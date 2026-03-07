@@ -64,6 +64,7 @@ class AuthInterceptor @Inject constructor(
         private const val CONTENT_TYPE_JSON = "application/json"
         private const val SEGMENT_TYPE = "segment_type"
         const val SEGMENT_TYPE_VALUE = "RETAIL"
+        const val CUSTOMER = "CUSTOMER"
         private const val BEARER_PREFIX = "Bearer "
         const val PLATFORM_VALUE = "ANDROID"
     }

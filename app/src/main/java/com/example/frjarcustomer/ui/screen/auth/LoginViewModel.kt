@@ -73,18 +73,16 @@ class LoginViewModel @Inject constructor(
             when (_selectedTabIndex.value) {
                 0 -> {
                     val phone = _mobileNumber.value
-                    sendLoginOtp(phone = phone, moveToOtp = {
-                        moveToOtp(phone)
-                    })
-
+                    sendLoginOtp(phone = phone, moveToOtp = { moveToOtp(phone) })
                 }
-
-                1 -> moveToSignUpOtp(_mobileNumber.value)
+                1 -> {
+                    val phone = _mobileNumber.value
+                    registerWithPhoneApi(phone = phone, moveToSignUpOtp = { moveToSignUpOtp(phone) })
+                }
                 else -> moveToOtp(_mobileNumber.value)
             }
         }
     }
-
 
     private fun sendLoginOtp(
         moveToOtp: (String?) -> Unit,
@@ -116,8 +114,32 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-
-
+    private fun registerWithPhoneApi(
+        phone: String,
+        moveToSignUpOtp: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            _isLoading.update { true }
+            repository.registerWithPhone(phone).collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading -> { }
+                    is ApiResult.Success -> {
+                        _isLoading.update { false }
+                        moveToSignUpOtp(phone)
+                    }
+                    is ApiResult.Error -> {
+                        _isLoading.update { false }
+                        SnackbarController.show(
+                            SnackbarModel(
+                                type = MessageType.ERROR,
+                                message = MessageContent.PlainString(apiResult.message)
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
 
 
 

@@ -1,5 +1,6 @@
 package com.example.frjarcustomer.data.remote.model.request
 
+import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.CUSTOMER
 import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.PLATFORM_VALUE
 import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.SEGMENT_TYPE_VALUE
 import com.google.gson.annotations.SerializedName
@@ -21,13 +22,16 @@ data class GenericBaseRequest(
     @SerializedName("phone")
     val phone: String? = null,
 
+    @SerializedName("user_type")
+    val userType: String? = CUSTOMER,
+
     @SerializedName("password")
     val password: String? = null,
     @SerializedName("otp")
     val otp: String? = null,
 
     @SerializedName("device_type")
-    val deviceType: String? = null,
+    val deviceType: String? = PLATFORM_VALUE,
 
     @SerializedName("firebase_token")
     val firebaseToken: String? = null,

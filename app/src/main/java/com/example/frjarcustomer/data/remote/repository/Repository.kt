@@ -34,4 +34,7 @@ interface Repository {
 
     suspend fun userResendOtp(): Flow<ApiResult<BaseResponse<OtpResendResponse>>>
 
+    suspend fun registerWithPhone(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>>
+
+
 }
