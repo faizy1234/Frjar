@@ -7,8 +7,10 @@ import com.google.gson.annotations.SerializedName
 
 
 data class GenericBaseRequest(
-    @SerializedName("_id")
+    @SerializedName("user_id")
     val userId: String? = null,
+    @SerializedName("is_verified")
+    val isVerified: Boolean?= null,
     @SerializedName("device_id")
     val deviceId: String? = null,
     @SerializedName("platform")

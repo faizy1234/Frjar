@@ -138,19 +138,23 @@ class OtpViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 _isLoading.update { true }
-                repository.loginWithPhone(
-                    phoneNumber = otpScreenContent.number,
-                    password = null,
-                    otp = _otp.value,
-                    isPasswordSignIn = false
-                ).collect { apiResult ->
+                val flow = if (otpScreenContent.isSignup) {
+                    repository.userVerification(otp = _otp.value, isVerify = true)
+                } else {
+                    repository.loginWithPhone(
+                        phoneNumber = otpScreenContent.number,
+                        password = null,
+                        otp = _otp.value,
+                        isPasswordSignIn = false
+                    )
+                }
+                flow.collect { apiResult ->
                     when (apiResult) {
                         is ApiResult.Loading -> {}
                         is ApiResult.Success -> {
                             _isLoading.update { false }
                             onSuccess()
                         }
-
                         is ApiResult.Error -> {
                             _isLoading.update { false }
                             SnackbarController.show(

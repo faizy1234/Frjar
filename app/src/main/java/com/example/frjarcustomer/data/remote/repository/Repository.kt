@@ -32,6 +32,12 @@ interface Repository {
         isPasswordSignIn: Boolean = false
     ): Flow<ApiResult<BaseResponse<UserResponse>>>
 
+
+    suspend fun userVerification(
+        otp: String? = null,
+        isVerify: Boolean = false
+    ): Flow<ApiResult<BaseResponse<UserResponse>>>
+
     suspend fun userResendOtp(): Flow<ApiResult<BaseResponse<OtpResendResponse>>>
 
     suspend fun registerWithPhone(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>>

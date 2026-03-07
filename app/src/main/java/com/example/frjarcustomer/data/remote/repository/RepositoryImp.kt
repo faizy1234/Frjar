@@ -36,10 +36,17 @@ class RepositoryImp @Inject constructor(
     private val imageWarmer: ImageCacheWarmer
 ) : Repository {
 
-    private suspend fun createBaseRequest(phoneNumber: String? = null) = GenericBaseRequest(
-        userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
+    private suspend fun createBaseRequest(
+        phoneNumber: String? = null,
+        isVerify: Boolean = false,
+        isALLow: Boolean = false,
+        otp: String? = null
+    ) = GenericBaseRequest(
+        userId = sessionManager.getUser()?.userId,
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
+        otp = if (isALLow) otp else null,
+        isVerified = if (isALLow) isVerify else null,
         firebaseToken = fcmRepository.getCurrentToken(),
         appVersion = appConfig.versionName.toDoubleOrNull(),
         phone = if (phoneNumber != null) NUMBER_PREFIX + phoneNumber else null
@@ -62,6 +69,16 @@ class RepositoryImp @Inject constructor(
             otp = if (!isPasswordSignIn) otp else null
 
         )
+
+    private suspend fun createResendOtp() =
+        GenericBaseRequest(
+            userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
+            deviceId = fcmRepository.getDeviceId(),
+            appLang = languageProvider.getLanguageCode(),
+            appVersion = appConfig.versionName.toDoubleOrNull()
+        )
+
+
 
 
     override suspend fun getCustomerAppSetting(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData>>> =
@@ -163,11 +180,41 @@ class RepositoryImp @Inject constructor(
                 }
         }
 
+    override suspend fun userVerification(
+        otp: String?,
+        isVerify: Boolean
+    ): Flow<ApiResult<BaseResponse<UserResponse>>> =
+        flow {
+            safeApiCall(
+                ioDispatcher,
+                {
+                    apiService.userVerification(
+                        createBaseRequest(
+                            otp = otp,
+                            isALLow = true,
+                            isVerify = isVerify
+                        )
+                    )
+                },
+                stringProvider,
+                languageProvider.getLanguageCode()
+            ).ensureSuccessCode(languageProvider, stringProvider)
+                .collect { result ->
+                    if (result is ApiResult.Success) result.data.data?.let {
+                        sessionManager.setToken(
+                            it.token
+                        )
+                        sessionManager.setUser(it)
+                    }
+                    emit(result)
+                }
+        }
+
 
     override suspend fun userResendOtp(): Flow<ApiResult<BaseResponse<OtpResendResponse>>> =
         safeApiCall(
             ioDispatcher,
-            { apiService.userResendOtp(createBaseRequest(null)) },
+            { apiService.userResendOtp(createResendOtp()) },
             stringProvider,
             languageProvider.getLanguageCode()
         ).ensureSuccessCode(languageProvider, stringProvider)

@@ -57,7 +57,7 @@ class AuthInterceptor @Inject constructor(
 
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"
-        private const val CONTENT_TYPE = "Content-Typ"
+        private const val CONTENT_TYPE = "Content-Type"
         private const val HEADER_ACCEPT = "Accept"
         private const val HEADER_ACCEPT_LANGUAGE = "app_lang"
         private const val HEADER_DEVICE_ID = "device_id"

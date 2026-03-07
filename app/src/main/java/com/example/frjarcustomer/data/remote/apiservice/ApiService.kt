@@ -55,4 +55,7 @@ interface ApiService {
     @POST(Endpoints.REGISTER_WITH_PHONE)
     suspend fun registerWithPhone(@Body request: GenericBaseRequest): BaseResponse<UserResponse>
 
+    @POST(Endpoints.USER_VERIFICATION)
+    suspend fun userVerification(@Body request: GenericBaseRequest): BaseResponse<UserResponse>
+
 }

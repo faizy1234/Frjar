@@ -83,25 +83,18 @@ fun NavGraphBuilder.navigationAuthGraph(
                     OtpScreenContent.serializer()
                 ),
             )
-
         ) {
             val otpViewModel: OtpViewModel = hiltViewModel()
             OtpScreen(
-                onChangeNumberClick = {
-                    navHostController.navigateUp()
-                },
-                onResend = {
-
-
-                },
+                onChangeNumberClick = { navHostController.navigateUp() },
+                onResend = { otpViewModel.resendOtp() },
                 onPrimaryClick = {
-                    navHostController.navigate(AppRoute.SecureAccount(phoneNumber = otpViewModel.otpScreenContent.number.orEmpty()))
+                    otpViewModel.validateOtpAndProceed {
+                        navHostController.navigate(AppRoute.SecureAccount(phoneNumber = otpViewModel.otpScreenContent.number.orEmpty()))
+                    }
                 },
                 viewModel = otpViewModel
-
             )
-
-
         }
         composable<AppRoute.LoginContainer>(
             typeMap = mapOf(
