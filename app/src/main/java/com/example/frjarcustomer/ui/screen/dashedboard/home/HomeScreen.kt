@@ -24,13 +24,7 @@ import com.example.frjarcustomer.appstate.resourceString
 
 @Composable
 fun HomeScreen(
-    onNavigateToDetail: (String) -> Unit,
-    onNavigateToProfile: (userId: String, tab: Int) -> Unit,
-    onNavigateToAppFeature: () -> Unit = {},
-    onNavigateToVersionExpire: () -> Unit = {},
-    onNavigateToNoConnection: () -> Unit = {},
 
-    onNavigateToAuth: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -39,37 +33,8 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = onNavigateToAuth) {
-            Text(resourceString(R.string.auth))
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick ={
-            SnackbarController.show(
-                SnackbarModel(
-                    type = MessageType.SUCCESS,
-                    message = MessageContent.PlainString("Copied to clipboard"),
-                    duration = SnackbarDuration.SHORT
-                )
-            )
-        }) {
-            Text("New Features")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = {
-            SnackbarController.show(
-                SnackbarModel(
-                    type = MessageType.ERROR,
-                    message = MessageContent.PlainString("Copied to clipboard"),
-                    duration = SnackbarDuration.SHORT
-                )
-            )
 
-        }) {
-            Text("Version Expire")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToNoConnection) {
-            Text("No Connection")
-        }
+        Text("Home Screen")
+
     }
 }

@@ -19,6 +19,7 @@ import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.toOn
 import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.data.remote.utils.ensureSuccessCode
 import com.example.frjarcustomer.data.remote.utils.safeApiCall
+import com.example.frjarcustomer.utils.UserinfoManager
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +44,7 @@ class RepositoryImp @Inject constructor(
         otp: String? = null
     ) = GenericBaseRequest(
         userId = sessionManager.getUser()?.userId
-            ?: (fcmRepository.getDeviceId() + fcmRepository.getDeviceId()),
+            ?: UserinfoManager.getUserId(),
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
         otp = if (isALLow) otp else null,
@@ -61,7 +62,7 @@ class RepositoryImp @Inject constructor(
     ) =
         GenericBaseRequest(
             userId = sessionManager.getUser()?.userId
-                ?: (fcmRepository.getDeviceId() + fcmRepository.getDeviceId()),
+                ?: UserinfoManager.getUserId(),
             deviceId = fcmRepository.getDeviceId(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull(),
@@ -75,7 +76,7 @@ class RepositoryImp @Inject constructor(
     private suspend fun createResendOtp() =
         GenericBaseRequest(
             userId = sessionManager.getUser()?.userId
-                ?: (fcmRepository.getDeviceId() + fcmRepository.getDeviceId()),
+                ?: UserinfoManager.getUserId(),
             deviceId = fcmRepository.getDeviceId(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull()

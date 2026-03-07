@@ -29,15 +29,7 @@ fun NavGraphBuilder.navigationHomeGraph(
     ) {
         composable<AppRoute.Home> {
             HomeScreen(
-                onNavigateToDetail = { itemId ->
-                    navHostController.navigate(AppRoute.Detail(itemId = itemId))
-                },
-                onNavigateToProfile = { userId, tab ->
-                },
-                onNavigateToAppFeature = { navHostController.navigate(AppRoute.AppFeature) },
-                onNavigateToVersionExpire = { navHostController.navigate(AppRoute.VersionExpire()) },
-                onNavigateToNoConnection = { navHostController.navigate(AppRoute.NoConnection) },
-                onNavigateToAuth = { navigateToAuth(navHostController) }
+
             )
         }
 

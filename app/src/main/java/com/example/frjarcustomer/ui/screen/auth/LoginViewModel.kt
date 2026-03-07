@@ -14,6 +14,7 @@ import com.example.frjarcustomer.navigation.routes.AppRoute
 import com.example.frjarcustomer.ui.components.AuthValidation
 import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.components.ValidationShakeState
+import com.example.frjarcustomer.utils.UserinfoManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -105,11 +106,13 @@ class LoginViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
+                        UserinfoManager.init(apiResult.data.data?.userId)
                         _isLoading.update { false }
                         moveToOtp(phone)
                     }
 
                     is ApiResult.Error -> {
+                        UserinfoManager.resetState()
                         _isLoading.update { false }
                         SnackbarController.show(
                             SnackbarModel(
@@ -133,11 +136,15 @@ class LoginViewModel @Inject constructor(
                 when (apiResult) {
                     is ApiResult.Loading -> {}
                     is ApiResult.Success -> {
+                        UserinfoManager.init(apiResult.data.data?.userId)
+
                         _isLoading.update { false }
                         moveToSignUpOtp(phone)
                     }
 
                     is ApiResult.Error -> {
+                        UserinfoManager.resetState()
+
                         _isLoading.update { false }
                         SnackbarController.show(
                             SnackbarModel(
@@ -149,6 +156,12 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        UserinfoManager.resetState()
+
     }
 
 
