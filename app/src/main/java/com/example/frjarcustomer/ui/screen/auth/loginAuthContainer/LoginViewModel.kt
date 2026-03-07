@@ -1,16 +1,21 @@
 package com.example.frjarcustomer.ui.screen.auth.loginAuthContainer
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
+import com.example.frjarcustomer.navigation.routes.AppRoute
+import com.example.frjarcustomer.navigation.utils.CustomNavType
 import com.example.frjarcustomer.ui.components.AuthValidation
 import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.components.ValidationShakeState
+import com.example.frjarcustomer.ui.screen.auth.otpScreen.contentHolder.OtpScreenContent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,16 +23,29 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.reflect.typeOf
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val typeMap = mapOf(
+        typeOf<OtpScreenContent>() to CustomNavType(
+            OtpScreenContent::class.java,
+            OtpScreenContent.serializer()
+        )
+    )
+
+    val otpScreenContent: OtpScreenContent =
+        savedStateHandle.toRoute<AppRoute.OtpScreen>(typeMap).content
+
 
     private val _pagerPage = MutableStateFlow(0)
     val pagerPage: StateFlow<Int> = _pagerPage.asStateFlow()
 
-    private val _mobileNumber = MutableStateFlow("")
+    private val _mobileNumber = MutableStateFlow(otpScreenContent.number ?: "")
     val mobileNumber: StateFlow<String> = _mobileNumber.asStateFlow()
 
     private val _password = MutableStateFlow("")
@@ -102,11 +120,12 @@ class LoginViewModel @Inject constructor(
                     isPasswordSignIn = true
                 ).collect { apiResult ->
                     when (apiResult) {
-                        is ApiResult.Loading -> { }
+                        is ApiResult.Loading -> {}
                         is ApiResult.Success -> {
                             _isLoading.update { false }
                             onSuccess()
                         }
+
                         is ApiResult.Error -> {
                             _isLoading.update { false }
                             SnackbarController.show(

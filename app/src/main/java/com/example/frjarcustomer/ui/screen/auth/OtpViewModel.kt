@@ -40,9 +40,8 @@ class OtpViewModel @Inject constructor(
         )
     )
 
-    val otpScreenContent: OtpScreenContent = runCatching {
-        savedStateHandle.toRoute<AppRoute.LoginContainer>(typeMap)
-    }.getOrNull()?.content ?: savedStateHandle.toRoute<AppRoute.OtpScreen>(typeMap).content
+    val otpScreenContent: OtpScreenContent =
+        savedStateHandle.toRoute<AppRoute.OtpScreen>(typeMap).content
 
     private val _otp = MutableStateFlow("")
     val otp: StateFlow<String> = _otp.asStateFlow()
@@ -155,6 +154,7 @@ class OtpViewModel @Inject constructor(
                             _isLoading.update { false }
                             onSuccess()
                         }
+
                         is ApiResult.Error -> {
                             _isLoading.update { false }
                             SnackbarController.show(
