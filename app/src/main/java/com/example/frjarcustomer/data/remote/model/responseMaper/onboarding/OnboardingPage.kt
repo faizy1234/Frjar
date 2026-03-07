@@ -2,7 +2,7 @@ package com.example.frjarcustomer.data.remote.model.responseMaper.onboarding
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import com.example.frjarcustomer.data.remote.dto.onboarding.WalkThroughItemDto
+import com.example.frjarcustomer.data.remote.dto.response.onboarding.WalkThroughItemDto
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -23,7 +23,7 @@ data class OnboardingPage(
 ): Parcelable
 
 
-fun List<WalkThroughItemDto>.toOnboardingData(): OnboardingData =
+fun List<com.example.frjarcustomer.data.remote.dto.response.onboarding.WalkThroughItemDto>.toOnboardingData(): OnboardingData =
     OnboardingData(
         pages = this
             ?.filter { it.status == true }

@@ -35,6 +35,7 @@ import com.example.frjarcustomer.ui.components.AuthTextField
 import com.example.frjarcustomer.ui.components.AuthToggle
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
+import com.example.frjarcustomer.ui.components.OverlayLoader
 import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
@@ -57,14 +58,16 @@ fun LoginScreen(
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val mobileNumber by viewModel.mobileNumber.collectAsState()
     val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .background(AuthScreenBackground)
-            .statusBarsPadding()
-            .padding(horizontal = 12.sdp)
-    ) {
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = false)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .background(AuthScreenBackground)
+                .statusBarsPadding()
+                .padding(horizontal = 12.sdp)
+        ) {
         Spacer(modifier = Modifier.height(20.sdp))
 
         Box(
@@ -177,5 +180,16 @@ fun LoginScreen(
                 )
             }
         )
+        }
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                OverlayLoader()
+            }
+        }
     }
 }

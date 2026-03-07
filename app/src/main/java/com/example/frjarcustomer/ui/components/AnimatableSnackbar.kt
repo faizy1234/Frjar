@@ -10,6 +10,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -78,7 +80,7 @@ fun AnimatableSnackbar(
                 initialValue = 0f,
                 targetValue = 1f,
                 animationSpec = tween(
-                    durationMillis = 400,
+                    durationMillis = 200,
                     easing = EaseOutCubic
                 )
             ) { value, _ -> animProgress = value }
@@ -89,7 +91,7 @@ fun AnimatableSnackbar(
                 initialValue = 1f,
                 targetValue = 0f,
                 animationSpec = tween(
-                    durationMillis = 250,
+                    durationMillis = 200,
                     easing = FastOutLinearInEasing
                 )
             ) { value, _ -> animProgress = value }

@@ -9,14 +9,16 @@ import com.example.frjarcustomer.core.di.StringProvider
 import com.example.frjarcustomer.core.fcm.FcmRepository
 import com.example.frjarcustomer.core.session.SessionManager
 import com.example.frjarcustomer.data.remote.apiservice.ApiService
-import com.example.frjarcustomer.data.remote.dto.appsetting.AppSettingData
-import com.example.frjarcustomer.data.remote.dto.appversion.CheckAppVersionDto
-import com.example.frjarcustomer.data.remote.dto.baseResponse.BaseResponse
-import com.example.frjarcustomer.data.remote.dto.getToken.GetTokenDTO
+import com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData
+import com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVersionDto
+import com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse
+import com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO
+import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import com.example.frjarcustomer.data.remote.model.request.GenericBaseRequest
 import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.OnboardingData
 import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.toOnboardingData
 import com.example.frjarcustomer.data.remote.utils.ApiResult
+import com.example.frjarcustomer.data.remote.utils.ensureSuccessCode
 import com.example.frjarcustomer.data.remote.utils.safeApiCall
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,31 +34,40 @@ class RepositoryImp @Inject constructor(
     private val languageProvider: LanguageProvider,
     private val appConfig: AppConfig,
     private val sessionManager: SessionManager,
-    private  val imageWarmer: ImageCacheWarmer
+    private val imageWarmer: ImageCacheWarmer
 ) : Repository {
 
-    private suspend fun createBaseRequest() = GenericBaseRequest(
+    private suspend fun createBaseRequest(phoneNumber: String? = null) = GenericBaseRequest(
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
-        appVersion = appConfig.versionName.toDoubleOrNull()
+        appVersion = appConfig.versionName.toDoubleOrNull(),
+        phone = phoneNumber
     )
 
-    override suspend fun getCustomerAppSetting(): Flow<ApiResult<BaseResponse<AppSettingData>>> =
+    override suspend fun getCustomerAppSetting(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData>>> =
         safeApiCall(
             ioDispatcher,
             { apiService.getCustomerAppSetting(createBaseRequest()) },
-            stringProvider
-        )
+            stringProvider,
+            languageProvider.getLanguageCode()
+        ).ensureSuccessCode(languageProvider, stringProvider)
 
     override suspend fun getAllCustomerWalkThrough(): Flow<ApiResult<OnboardingData>> =
-        safeApiCall(ioDispatcher, { apiService.getAllCustomerWalkThrough() }, stringProvider)
+        safeApiCall(
+            ioDispatcher,
+            { apiService.getAllCustomerWalkThrough() },
+            stringProvider,
+            languageProvider.getLanguageCode()
+        )
+            .ensureSuccessCode(languageProvider, stringProvider)
             .map { result ->
                 when (result) {
                     is ApiResult.Success -> {
                         val onboardingData = result.data.data?.toOnboardingData()
                             ?: OnboardingData(emptyList())
 
-                        imageWarmer.preloadUrls(onboardingData.pages?.mapNotNull { it.imageRes } ?: emptyList())
+                        imageWarmer.preloadUrls(onboardingData.pages?.mapNotNull { it.imageRes }
+                            ?: emptyList())
                         ApiResult.Success(onboardingData)
                     }
 
@@ -65,27 +76,36 @@ class RepositoryImp @Inject constructor(
                 }
             }
 
-    override suspend fun getAuthToken(): Flow<ApiResult<BaseResponse<GetTokenDTO>>> = flow {
+    override suspend fun getAuthToken(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO>>> = flow {
         safeApiCall(
             ioDispatcher,
             { apiService.getAuthToken(createBaseRequest()) },
-            stringProvider
-        ).collect { result ->
-            if (result is ApiResult.Success) result.data.data?.token?.let {
-                sessionManager.setToken(
-                    it
-                )
+            stringProvider,
+            languageProvider.getLanguageCode()
+        ).ensureSuccessCode(languageProvider, stringProvider)
+            .collect { result ->
+                if (result is ApiResult.Success) result.data.data?.token?.let {
+                    sessionManager.setToken(
+                        it
+                    )
+                }
+                emit(result)
             }
-            emit(result)
-        }
     }
 
-    override suspend fun checkAppVersion(): Flow<ApiResult<BaseResponse<CheckAppVersionDto>>> =
+    override suspend fun checkAppVersion(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVersionDto>>> =
         safeApiCall(
             ioDispatcher,
             { apiService.checkAppVersion(createBaseRequest()) },
-            stringProvider
-        )
+            stringProvider,
+            languageProvider.getLanguageCode()
+        ).ensureSuccessCode(languageProvider, stringProvider)
 
-
+    override suspend fun sendLoginOtp(phoneNumber: String?): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.user.UserResponse>>> =
+        safeApiCall(
+            ioDispatcher,
+            { apiService.sendLoginOtp(createBaseRequest(phoneNumber)) },
+            stringProvider,
+            languageProvider.getLanguageCode()
+        ).ensureSuccessCode(languageProvider, stringProvider)
 }

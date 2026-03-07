@@ -1,10 +1,13 @@
 package com.example.frjarcustomer.ui.screen.auth
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.data.remote.repository.Repository
+import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.ui.components.AuthValidation
 import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.components.ValidationShakeState
@@ -13,10 +16,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val repository: Repository
+) : ViewModel() {
 
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
@@ -26,6 +32,9 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     private val _validationShake = MutableStateFlow(ValidationShakeState())
     val validationShake: StateFlow<ValidationShakeState> = _validationShake.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun selectTab(index: Int) {
         _selectedTabIndex.update { index }
@@ -62,10 +71,50 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             }
         } else {
             when (_selectedTabIndex.value) {
-                0 -> moveToOtp(_mobileNumber.value)
+                0 -> {
+                    val phone = _mobileNumber.value
+                    sendLoginOtp(phone = phone, moveToOtp = {
+                        moveToOtp(phone)
+                    })
+
+                }
+
                 1 -> moveToSignUpOtp(_mobileNumber.value)
                 else -> moveToOtp(_mobileNumber.value)
             }
         }
     }
+
+
+    private fun sendLoginOtp(
+        moveToOtp: (String?) -> Unit,
+        phone: String?,
+    ) {
+        viewModelScope.launch {
+            _isLoading.update { true }
+            repository.sendLoginOtp(phone).collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading -> {
+
+                    }
+                    is ApiResult.Success -> {
+                        _isLoading.update { false }
+                        moveToOtp(phone)
+                    }
+
+                    is ApiResult.Error -> {
+                        _isLoading.update { false }
+                        SnackbarController.show(
+                            SnackbarModel(
+                                type = MessageType.ERROR,
+                                message = MessageContent.PlainString(apiResult.message)
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
 }

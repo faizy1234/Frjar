@@ -21,7 +21,7 @@ enum class MessageType {
 
 @Immutable
 enum class SnackbarDuration(val durationMs: Long) {
-    SHORT(4000L),
+    SHORT(2000L),
     LONG(10000L)
 }
 

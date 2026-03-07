@@ -19,6 +19,8 @@ import com.example.frjarcustomer.ui.components.GenericText
 import com.example.frjarcustomer.ui.theme.TextBlackDarkTitle
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.R
+import com.example.frjarcustomer.appstate.AppLanguage
+import com.example.frjarcustomer.appstate.AppLanguage.Companion.getLanguageName
 import com.example.frjarcustomer.appstate.LocalPaddingValues
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.ui.components.ContactInfoItem
@@ -29,6 +31,7 @@ import com.example.frjarcustomer.ui.components.OrDivider
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
 import com.example.frjarcustomer.ui.theme.DarkNavyBlue
 import com.example.frjarcustomer.ui.theme.TextGreyscale500
+import com.example.frjarcustomer.utils.LocaleManager
 import network.chaintech.sdpcomposemultiplatform.sdp
 import network.chaintech.sdpcomposemultiplatform.ssp
 
@@ -61,7 +64,7 @@ fun ReachOutScreen(
         ContactInfoItem(
             iconRes = R.drawable.ic_language,
             title = resourceString(R.string.language),
-            subtitle = resourceString(R.string.english),
+            subtitle = getLanguageName(LocaleManager.currentLanguage?: com.example.frjarcustomer.data.remote.utils.AppLanguage.ENGLISH.value),
             onClick = onLanguageClick
         )
     )

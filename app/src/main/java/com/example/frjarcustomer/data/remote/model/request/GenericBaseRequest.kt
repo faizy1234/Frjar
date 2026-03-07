@@ -13,7 +13,9 @@ data class GenericBaseRequest(
     @SerializedName("segment_type")
     val segmentType: String? = SEGMENT_TYPE_VALUE,
     @SerializedName("app_version")
-    val appVersion: Double ? = null,
+    val appVersion: Double? = null,
     @SerializedName("app_lang")
-    val appLang: String? = null
+    val appLang: String? = null,
+    @SerializedName("phone")
+    val phone: String? = null
 )
