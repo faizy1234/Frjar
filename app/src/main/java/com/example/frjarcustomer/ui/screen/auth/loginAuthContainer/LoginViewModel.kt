@@ -1,10 +1,13 @@
 package com.example.frjarcustomer.ui.screen.auth.loginAuthContainer
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.data.remote.repository.Repository
+import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.ui.components.AuthValidation
 import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.components.ValidationShakeState
@@ -14,9 +17,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val repository: Repository
+) : ViewModel() {
 
     private val _pagerPage = MutableStateFlow(0)
     val pagerPage: StateFlow<Int> = _pagerPage.asStateFlow()
@@ -35,6 +41,9 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     private val _validationShake = MutableStateFlow(ValidationShakeState())
     val validationShake: StateFlow<ValidationShakeState> = _validationShake.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun setPagerPage(page: Int) {
         _pagerPage.update { page.coerceIn(0, 1) }
@@ -84,7 +93,32 @@ class LoginViewModel @Inject constructor() : ViewModel() {
                 ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
             }
         } else {
-            onSuccess()
+            viewModelScope.launch {
+                _isLoading.update { true }
+                repository.loginWithPhone(
+                    phoneNumber = _mobileNumber.value,
+                    password = _password.value,
+                    otp = null,
+                    isPasswordSignIn = true
+                ).collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> { }
+                        is ApiResult.Success -> {
+                            _isLoading.update { false }
+                            onSuccess()
+                        }
+                        is ApiResult.Error -> {
+                            _isLoading.update { false }
+                            SnackbarController.show(
+                                SnackbarModel(
+                                    type = MessageType.ERROR,
+                                    message = MessageContent.PlainString(apiResult.message)
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

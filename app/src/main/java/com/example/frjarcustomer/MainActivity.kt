@@ -25,14 +25,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.get
 import com.example.frjarcustomer.appstate.AppLanguage
 import com.example.frjarcustomer.appstate.FrjarBottomAppBar
 import com.example.frjarcustomer.appstate.LanguageAwareComponent
 import com.example.frjarcustomer.appstate.LocalPaddingValues
 import com.example.frjarcustomer.appstate.MainActivityVm
+import com.example.frjarcustomer.appstate.ProfileTabEvent
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.navigation.graphs.HomeGraph
 import com.example.frjarcustomer.navigation.mainNavhost.AppNavGraph
+import com.example.frjarcustomer.navigation.routes.AppRoute
+import com.example.frjarcustomer.navigation.utils.navigateToAuth
 import com.example.frjarcustomer.ui.components.AnimatableSnackbar
 import com.example.frjarcustomer.navigation.utils.TopLevelDestination
 import com.example.frjarcustomer.ui.theme.FrjarTheme
@@ -64,6 +69,20 @@ class MainActivity : ComponentActivity() {
                     TopLevelDestination.FavoritesScreenNavigationRoute,
                     TopLevelDestination.SettingsScreenNavigationRoute
                 )
+                androidx.compose.runtime.LaunchedEffect(Unit) {
+                    mainActivityVm.profileTabEvent.collect { event ->
+                        when (event) {
+                            is ProfileTabEvent.NavigateToAuth -> navigateToAuth(navController)
+                            is ProfileTabEvent.NavigateToProfile -> navController.navigate(AppRoute.Profile) {
+                                popUpTo(navController.graph[HomeGraph].id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    }
+                }
 
                 LanguageAwareComponent(
                     viewModel = mainActivityVm,
@@ -83,7 +102,11 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         bottomBar = {
-                            FrjarBottomAppBar(navController = navController, topLevelDestination)
+                            FrjarBottomAppBar(
+                                navController = navController,
+                                bottomBarItems = topLevelDestination,
+                                onProfileClick = { mainActivityVm.onProfileTabClicked() }
+                            )
                         }
                     ) { innerPadding ->
                             CompositionLocalProvider(LocalPaddingValues provides innerPadding) {

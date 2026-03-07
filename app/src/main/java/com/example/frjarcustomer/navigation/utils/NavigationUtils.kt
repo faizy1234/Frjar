@@ -43,7 +43,6 @@ fun navigateToHome(navController: NavController) {
  */
 fun navigateToAuth(navController: NavController) {
     navController.navigate(AuthGraph) {
-        popUpTo(0) { inclusive = false }
         launchSingleTop = true
     }
 }

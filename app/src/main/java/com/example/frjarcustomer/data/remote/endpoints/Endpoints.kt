@@ -2,6 +2,7 @@ package com.example.frjarcustomer.data.remote.endpoints
 
 
 object Endpoints {
+     const val NUMBER_PREFIX = "0"
     private const val PREFIX = "api/"
     const val GET_ALL_CUSTOMER_WALK_THROUGH = "${PREFIX}customer/setting/getallcustomerWalkThroughs"
     const val GET_CUSTOMER_APP_SETTINGS = "${PREFIX}customer/setting/getCustomerAppSetting"

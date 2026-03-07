@@ -8,6 +8,8 @@ import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.data.remote.repository.Repository
+import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.navigation.routes.AppRoute
 import com.example.frjarcustomer.navigation.utils.CustomNavType
 import com.example.frjarcustomer.ui.components.AuthValidation
@@ -26,7 +28,8 @@ import javax.inject.Inject
 import kotlin.reflect.typeOf
 @HiltViewModel
 class OtpViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val repository: Repository
 ) : ViewModel() {
 
     private val typeMap = mapOf(
@@ -48,6 +51,9 @@ class OtpViewModel @Inject constructor(
 
     private val _validationShake = MutableStateFlow(ValidationShakeState())
     val validationShake: StateFlow<ValidationShakeState> = _validationShake.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     private var timerJob: Job? = null
 
@@ -94,7 +100,32 @@ class OtpViewModel @Inject constructor(
                 ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
             }
         } else {
-            onSuccess()
+            viewModelScope.launch {
+                _isLoading.update { true }
+                repository.loginWithPhone(
+                    phoneNumber = otpScreenContent.number,
+                    password = null,
+                    otp = _otp.value,
+                    isPasswordSignIn = false
+                ).collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> { }
+                        is ApiResult.Success -> {
+                            _isLoading.update { false }
+                            onSuccess()
+                        }
+                        is ApiResult.Error -> {
+                            _isLoading.update { false }
+                            SnackbarController.show(
+                                SnackbarModel(
+                                    type = MessageType.ERROR,
+                                    message = MessageContent.PlainString(apiResult.message)
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 

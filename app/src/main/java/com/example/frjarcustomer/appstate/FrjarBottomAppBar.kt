@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.get
 import com.example.frjarcustomer.navigation.graphs.HomeGraph
+import com.example.frjarcustomer.navigation.routes.AppRoute
 import com.example.frjarcustomer.navigation.utils.NavigationScreenRouteClassNames
 import com.example.frjarcustomer.navigation.utils.TopLevelDestination
 import com.example.frjarcustomer.navigation.utils.currentRouteClassName
@@ -35,6 +36,7 @@ import network.chaintech.sdpcomposemultiplatform.ssp
 fun FrjarBottomAppBar(
     navController: NavController,
     bottomBarItems: List<TopLevelDestination>,
+    onProfileClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
@@ -55,12 +57,16 @@ fun FrjarBottomAppBar(
                 NavigationBarItem(
                     selected = false,
                     onClick = {
-                        navController.navigate(destination.route) {
-                            popUpTo(navController.graph[HomeGraph].id) {
-                                saveState = true
+                        if (destination.route == AppRoute.Profile && onProfileClick != null) {
+                            onProfileClick()
+                        } else {
+                            navController.navigate(destination.route) {
+                                popUpTo(navController.graph[HomeGraph].id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
                         }
                     },
                     icon = {

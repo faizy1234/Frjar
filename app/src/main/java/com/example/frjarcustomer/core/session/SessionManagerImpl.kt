@@ -3,6 +3,7 @@ package com.example.frjarcustomer.core.session
 import com.example.frjarcustomer.core.di.ApplicationScope
 import com.example.frjarcustomer.data.local.datastore.AppDataStore
 import com.example.frjarcustomer.data.local.datastore.PreferencesKeys
+import com.example.frjarcustomer.data.local.datastore.getObject
 import com.example.frjarcustomer.data.local.datastore.putObject
 import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import kotlinx.coroutines.CoroutineScope

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.AuthToggle
+import com.example.frjarcustomer.ui.components.OverlayLoader
 import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.screen.auth.OtpViewModel
 import com.example.frjarcustomer.ui.screen.auth.otpScreen.OtpScreen
@@ -51,20 +53,22 @@ fun LoginAuthContainer(
     val passwordVisible by loginVm.passwordVisible.collectAsStateWithLifecycle()
     val submitPressed by loginVm.submitButtonPressed.collectAsStateWithLifecycle()
     val validationShake by loginVm.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
+    val loginLoading by loginVm.isLoading.collectAsStateWithLifecycle(initialValue = false)
+    val otpLoading by otpVm.isLoading.collectAsStateWithLifecycle(initialValue = false)
 
     LaunchedEffect(pagerState.currentPage) {
         loginVm.setPagerPage(pagerState.currentPage)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AuthScreenBackground)
-            .statusBarsPadding()
-            .padding(horizontal = 12.sdp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        CoilImage(
+    Box(modifier = Modifier.fillMaxSize().background(AuthScreenBackground)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(horizontal = 12.sdp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            CoilImage(
             url = R.drawable.ic_close_back,
             contentDescription = null,
             modifier = Modifier
@@ -155,9 +159,18 @@ fun LoginAuthContainer(
                 }
             }
         }
-
     }
-
+        if (loginLoading || otpLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                OverlayLoader()
+            }
+        }
+    }
 }
 
 
