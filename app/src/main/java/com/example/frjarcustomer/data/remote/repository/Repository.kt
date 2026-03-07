@@ -15,13 +15,20 @@ import retrofit2.http.POST
 
 interface Repository {
 
-    suspend fun getCustomerAppSetting(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData>>>
+    suspend fun getCustomerAppSetting(): Flow<ApiResult<BaseResponse<AppSettingData>>>
 
     suspend fun getAllCustomerWalkThrough(): Flow<ApiResult<OnboardingData>>
 
-    suspend fun getAuthToken(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO>>>
+    suspend fun getAuthToken(): Flow<ApiResult<BaseResponse<GetTokenDTO>>>
 
-    suspend fun checkAppVersion(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVersionDto>>>
+    suspend fun checkAppVersion(): Flow<ApiResult<BaseResponse<CheckAppVersionDto>>>
 
-    suspend fun sendLoginOtp(phoneNumber: String?): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.user.UserResponse>>>
+    suspend fun sendLoginOtp(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>>
+
+    suspend fun loginWithPhone(
+        phoneNumber: String? = null,
+        password: String? = null,
+        otp: String? = null,
+        isPasswordSignIn: Boolean = false
+    ): Flow<ApiResult<BaseResponse<UserResponse>>>
 }

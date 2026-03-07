@@ -3,6 +3,8 @@ package com.example.frjarcustomer.core.session
 import com.example.frjarcustomer.core.di.ApplicationScope
 import com.example.frjarcustomer.data.local.datastore.AppDataStore
 import com.example.frjarcustomer.data.local.datastore.PreferencesKeys
+import com.example.frjarcustomer.data.local.datastore.putObject
+import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
@@ -29,6 +31,13 @@ class SessionManagerImpl @Inject constructor(
     override suspend fun setToken(token: String?) {
         tokenHolder.set(token)
         dataStore.putString(PreferencesKeys.USER_TOKEN, token)
+    }
+
+    override suspend fun getUser(): UserResponse? =
+        dataStore.getObject<UserResponse>(PreferencesKeys.USER).getOrNull()
+
+    override suspend fun setUser(user: UserResponse?) {
+        dataStore.putObject(PreferencesKeys.USER, user)
     }
 
     override suspend fun setLanguage(language: String?) {

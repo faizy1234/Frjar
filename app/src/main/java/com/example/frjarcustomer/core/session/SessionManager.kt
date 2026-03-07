@@ -10,6 +10,8 @@ interface SessionManager {
     fun getLanguage(): String?
 
     suspend fun setToken(token: String?)
+    suspend fun getUser(): com.example.frjarcustomer.data.remote.dto.response.user.UserResponse?
+    suspend fun setUser(user: com.example.frjarcustomer.data.remote.dto.response.user.UserResponse?)
     suspend fun setLanguage(language: String?)
 
     fun setLanguageInMemory(code: String?)
