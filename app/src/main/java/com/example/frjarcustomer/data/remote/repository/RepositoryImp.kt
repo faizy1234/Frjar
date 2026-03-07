@@ -42,7 +42,8 @@ class RepositoryImp @Inject constructor(
         isALLow: Boolean = false,
         otp: String? = null
     ) = GenericBaseRequest(
-        userId = sessionManager.getUser()?.userId,
+        userId = sessionManager.getUser()?.userId
+            ?: (fcmRepository.getDeviceId() + fcmRepository.getDeviceId()),
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
         otp = if (isALLow) otp else null,
@@ -59,7 +60,8 @@ class RepositoryImp @Inject constructor(
         isPasswordSignIn: Boolean = false
     ) =
         GenericBaseRequest(
-            userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
+            userId = sessionManager.getUser()?.userId
+                ?: (fcmRepository.getDeviceId() + fcmRepository.getDeviceId()),
             deviceId = fcmRepository.getDeviceId(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull(),
@@ -72,7 +74,8 @@ class RepositoryImp @Inject constructor(
 
     private suspend fun createResendOtp() =
         GenericBaseRequest(
-            userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
+            userId = sessionManager.getUser()?.userId
+                ?: (fcmRepository.getDeviceId() + fcmRepository.getDeviceId()),
             deviceId = fcmRepository.getDeviceId(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull()

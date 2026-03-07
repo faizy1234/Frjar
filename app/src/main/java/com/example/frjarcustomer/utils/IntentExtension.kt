@@ -56,3 +56,36 @@ fun openDialer(context: Context?, phoneNumber: String?) {
         e.printStackTrace()
     }
 }
+
+
+fun openMapLocation(
+    context: Context?,
+    latitude: Double?,
+    longitude: Double?
+) {
+
+    if (context == null || latitude == null || longitude == null) return
+
+    try {
+
+        val uri = "geo:$latitude,$longitude?q=$latitude,$longitude".toUri()
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+            setPackage("com.google.android.apps.maps")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        try {
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            val fallbackUri =
+                "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude".toUri()
+            val fallbackIntent = Intent(Intent.ACTION_VIEW, fallbackUri).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(fallbackIntent)
+        }
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}

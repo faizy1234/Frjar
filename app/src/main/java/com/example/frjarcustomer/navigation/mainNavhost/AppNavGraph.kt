@@ -24,6 +24,7 @@ fun AppNavGraph(
 ) {
 
     val sharedViewModel: SplashViewModel = hiltViewModel()
+    val context = navController.context
     NavHost(
         navController = navController,
         startDestination = RootGraph,
@@ -41,6 +42,8 @@ fun AppNavGraph(
         )
         navigationAuthGraph(
             navHostController = navController,
+            sharedViewModel,
+            context
         )
         navigationHomeGraph(
             navHostController = navController,

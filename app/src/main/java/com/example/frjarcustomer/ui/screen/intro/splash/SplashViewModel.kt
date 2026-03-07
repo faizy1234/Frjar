@@ -143,7 +143,11 @@ class SplashViewModel @Inject constructor(
                                 contactNo = appSettingData?.customerSupportNo,
                                 maintenanceMessageLocalized = appSettingData?.maintenanceMessageLocalized,
                                 appUpdateMessageLocalized = appSettingData?.appUpdateMessageLocalized,
-                                androidCustomerUrl = appSettingData?.androidCustomerUrl
+                                androidCustomerUrl = appSettingData?.androidCustomerUrl,
+                                latitude = appSettingData?.compLat,
+                                longitude = appSettingData?.compLng,
+                                address = appSettingData?.addressLocalized
+
 
                             )
                         }

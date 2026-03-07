@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.frjarcustomer.image.CoilImage
@@ -111,6 +112,8 @@ fun ContactInfoRow(
                 text = item.title,
                 color = TextBlackDarkTitle,
                 fontSize = 11.ssp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.SemiBold,
             )
             Spacer(modifier = Modifier.height(2.dp))

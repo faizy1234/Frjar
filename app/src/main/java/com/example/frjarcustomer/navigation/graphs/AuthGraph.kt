@@ -1,5 +1,6 @@
 package com.example.frjarcustomer.navigation.graphs
 
+import android.content.Context
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,6 +21,9 @@ import com.example.frjarcustomer.ui.screen.auth.loginAuthContainer.LoginViewMode
 import com.example.frjarcustomer.ui.screen.auth.otpScreen.OtpScreen
 import com.example.frjarcustomer.ui.screen.auth.otpScreen.contentHolder.OtpScreenContent
 import com.example.frjarcustomer.ui.screen.auth.reachout.ReachOutScreen
+import com.example.frjarcustomer.ui.screen.intro.splash.SplashViewModel
+import com.example.frjarcustomer.utils.openDialer
+import com.example.frjarcustomer.utils.openMapLocation
 import kotlinx.serialization.Serializable
 import kotlin.reflect.typeOf
 
@@ -28,17 +32,24 @@ object AuthGraph
 
 fun NavGraphBuilder.navigationAuthGraph(
     navHostController: NavHostController,
+    sharedViewModel: SplashViewModel,
+    context: Context,
 ) {
     navigation<AuthGraph>(startDestination = AppRoute.ReachOutScreen::class) {
 
         composable<AppRoute.ReachOutScreen> {
             ReachOutScreen(
+                sharedViewModel = sharedViewModel,
                 onBackClick = { navHostController.navigateUp() },
-                onSignInClick = {
-                    navHostController.navigate(AppRoute.Login)
+                onPhoneClick = {
+                    openDialer(context, it)
                 },
-
-
+                onLocationClick = { latitude, longitude ->
+                    openMapLocation(context, latitude, longitude)
+                },
+                onLanguageClick = { },
+                onCreateAccountClick = { navHostController.navigate(AppRoute.Login(initialTab = 1)) },
+                onSignInClick = { navHostController.navigate(AppRoute.Login(initialTab = 0)) }
             )
         }
 

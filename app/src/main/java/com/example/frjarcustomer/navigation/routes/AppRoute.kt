@@ -19,7 +19,7 @@ sealed interface AppRoute {
 
 
     @Serializable
-    data object Login : AppRoute
+    data class Login(val initialTab: Int = 0) : AppRoute
     @Serializable
     data object ReachOutScreen : AppRoute
 
