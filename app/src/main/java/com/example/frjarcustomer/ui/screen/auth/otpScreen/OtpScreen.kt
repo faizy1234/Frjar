@@ -34,6 +34,7 @@ import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
 import com.example.frjarcustomer.ui.components.OtpDigitsRow
+import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.screen.auth.OtpViewModel
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.AuthTimerGreen
@@ -59,6 +60,8 @@ fun OtpScreen(
     val otpContent = viewModel.otpScreenContent
     val otp by viewModel.otp.collectAsStateWithLifecycle()
     val countdownSeconds by viewModel.countdownSeconds.collectAsStateWithLifecycle()
+    val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
+    val otpShakeTrigger = if (0 in validationShake.invalidIndices) validationShake.triggerId else 0
     val isSignup = otpContent.isSignup
     val horizontalPadding = if (isSignup) 18.sdp else 9.sdp
     val minutes = countdownSeconds / 60

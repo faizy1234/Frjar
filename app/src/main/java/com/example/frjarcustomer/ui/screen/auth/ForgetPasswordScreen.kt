@@ -50,7 +50,6 @@ import com.example.frjarcustomer.ui.components.AuthTextField
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
 import com.example.frjarcustomer.ui.components.OtpDigitsRow
-import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.theme.AuthBorder
 import com.example.frjarcustomer.ui.theme.AuthBorderNew
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
@@ -391,10 +390,6 @@ private fun InputEmailStep(
                 value = email,
                 onValueChange = onEmailChange,
                 placeholder = resourceString(R.string.example_email),
-                validationRules = listOf(
-                    ValidationRules.required("Email is required"),
-                    ValidationRules.email()
-                ),
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_mail),

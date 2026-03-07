@@ -28,6 +28,7 @@ import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.AuthToggle
+import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.screen.auth.OtpViewModel
 import com.example.frjarcustomer.ui.screen.auth.otpScreen.OtpScreen
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
@@ -45,10 +46,11 @@ fun LoginAuthContainer(
     val pagerState = rememberPagerState(pageCount = { 2 })
     val scope = rememberCoroutineScope()
     val pagerPage by loginVm.pagerPage.collectAsStateWithLifecycle()
-    val emailOrMobile by loginVm.emailOrMobile.collectAsStateWithLifecycle()
+    val mobileNumber by loginVm.mobileNumber.collectAsStateWithLifecycle()
     val password by loginVm.password.collectAsStateWithLifecycle()
     val passwordVisible by loginVm.passwordVisible.collectAsStateWithLifecycle()
     val submitPressed by loginVm.submitButtonPressed.collectAsStateWithLifecycle()
+    val validationShake by loginVm.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
 
     LaunchedEffect(pagerState.currentPage) {
         loginVm.setPagerPage(pagerState.currentPage)
@@ -132,30 +134,23 @@ fun LoginAuthContainer(
             ) {
                 when (page) {
                     0 -> OtpScreen(
-                        onChangeNumberClick =onBackClick,
-                        onResend = {
-
-
-                        },
-                        onPrimaryClick = {
-
-                        },
+                        onChangeNumberClick = onBackClick,
+                        onResend = { },
+                        onPrimaryClick = { otpVm.validateOtpAndProceed(onOtpVerified) },
                         viewModel = otpVm
-
                     )
 
                     1 -> LoginWithPassword(
-                        emailOrMobile = emailOrMobile,
-                        onEmailOrMobileChange = loginVm::setEmailOrMobile,
+                        mobileNumber = mobileNumber,
+                        onMobileNumberChange = loginVm::setMobileNumber,
                         password = password,
                         onPasswordChange = loginVm::setPassword,
                         passwordVisible = passwordVisible,
+                        submitPressed = submitPressed,
+                        validationShake = validationShake,
                         onTogglePasswordVisible = loginVm::togglePasswordVisible,
                         onForgotPasswordClick = onForgotPassword,
-                        onLoginClick = {
-                            onOtpVerified.invoke()
-                        },
-                        submitPressed = submitPressed
+                        onLoginClick = { loginVm.onLoginClick(onOtpVerified) }
                     )
                 }
             }

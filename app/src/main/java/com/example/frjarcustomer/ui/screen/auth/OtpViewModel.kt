@@ -4,8 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.frjarcustomer.appstate.MessageContent
+import com.example.frjarcustomer.appstate.MessageType
+import com.example.frjarcustomer.appstate.SnackbarController
+import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.navigation.routes.AppRoute
 import com.example.frjarcustomer.navigation.utils.CustomNavType
+import com.example.frjarcustomer.ui.components.AuthValidation
+import com.example.frjarcustomer.ui.components.ValidationRules
+import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.screen.auth.otpScreen.contentHolder.OtpScreenContent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -39,6 +46,9 @@ class OtpViewModel @Inject constructor(
     private val _countdownSeconds = MutableStateFlow(90)
     val countdownSeconds: StateFlow<Int> = _countdownSeconds.asStateFlow()
 
+    private val _validationShake = MutableStateFlow(ValidationShakeState())
+    val validationShake: StateFlow<ValidationShakeState> = _validationShake.asStateFlow()
+
     private var timerJob: Job? = null
 
     init {
@@ -62,6 +72,30 @@ class OtpViewModel @Inject constructor(
     fun resetTimer() {
         _countdownSeconds.update { 90 }
         startTimer()
+    }
+
+    fun validateOtpAndProceed(onSuccess: () -> Unit) {
+        val result = AuthValidation.validate(
+            listOf(
+                _otp.value to listOf(
+                    ValidationRules.required("Verification code is required"),
+                    ValidationRules.custom("Please enter 4-digit verification code") { it.length == 4 }
+                )
+            )
+        )
+        if (result != null) {
+            SnackbarController.show(
+                SnackbarModel(
+                    type = MessageType.ERROR,
+                    message = MessageContent.PlainString(result.firstErrorMessage)
+                )
+            )
+            _validationShake.update {
+                ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
+            }
+        } else {
+            onSuccess()
+        }
     }
 
     override fun onCleared() {

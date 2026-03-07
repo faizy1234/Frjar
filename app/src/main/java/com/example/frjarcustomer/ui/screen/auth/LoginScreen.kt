@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +35,7 @@ import com.example.frjarcustomer.ui.components.AuthTextField
 import com.example.frjarcustomer.ui.components.AuthToggle
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
+import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
 import com.example.frjarcustomer.ui.theme.ButtonPrimaryPressed
@@ -54,6 +56,7 @@ fun LoginScreen(
 ) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val mobileNumber by viewModel.mobileNumber.collectAsState()
+    val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -120,7 +123,10 @@ fun LoginScreen(
         AuthTextField(
             label = resourceString(R.string.mobile_number),
             value = mobileNumber,
+            onValueChange = viewModel::setMobileNumber,
             keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone,
+            fieldIndex = 0,
+            validationShake = validationShake,
             leadingIcon = {
                 Row(
                     modifier = Modifier.wrapContentSize(),
@@ -146,7 +152,6 @@ fun LoginScreen(
 
                 }
             },
-            onValueChange = viewModel::setMobileNumber,
             placeholder = resourceString(R.string.mobile_number_placeholder)
         )
         Spacer(modifier = Modifier.height(24.sdp))

@@ -55,7 +55,16 @@ fun HomeScreen(
             Text("New Features")
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToVersionExpire) {
+        Button(onClick = {
+            SnackbarController.show(
+                SnackbarModel(
+                    type = MessageType.ERROR,
+                    message = MessageContent.PlainString("Copied to clipboard"),
+                    duration = SnackbarDuration.SHORT
+                )
+            )
+
+        }) {
             Text("Version Expire")
         }
         Spacer(modifier = Modifier.height(12.dp))

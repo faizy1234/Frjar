@@ -35,7 +35,6 @@ import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.AuthTextField
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
-import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
 import com.example.frjarcustomer.ui.theme.InterFontFamily
@@ -118,21 +117,13 @@ fun SecureAccountScreen(
             value = email,
             isOptionalHeader = true,
             onValueChange = viewModel::setEmail,
-            placeholder = resourceString(R.string.example_email),
-            validationRules = listOf(
-                ValidationRules.required("Email is required"),
-                ValidationRules.email()
-            )
+            placeholder = resourceString(R.string.example_email)
         )
         Spacer(modifier = Modifier.height(12.sdp))
 
         AuthTextField(
             label = resourceString(R.string.password),
             value = password,
-            validationRules = listOf(
-                ValidationRules.required("Password is required"),
-                ValidationRules.passwordStrength()
-            ),
             onValueChange = viewModel::setPassword,
             placeholder = resourceString(R.string.input_your_password_account),
             isPassword = true,
@@ -152,10 +143,6 @@ fun SecureAccountScreen(
         AuthTextField(
             label = resourceString(R.string.confirm_password),
             value = confirmPassword,
-            validationRules = listOf(
-                ValidationRules.required("Password does not match"),
-                ValidationRules.match(password)
-            ),
             onValueChange = viewModel::setConfirmPassword,
             placeholder = resourceString(R.string.input_your_password_account),
             isPassword = true,

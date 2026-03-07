@@ -3,15 +3,18 @@ package com.example.frjarcustomer.ui.screen.auth.loginAuthContainer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -22,7 +25,7 @@ import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.AuthTextField
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
-import com.example.frjarcustomer.ui.components.ValidationRules
+import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
 import com.example.frjarcustomer.ui.theme.TextGreyscale500
@@ -32,12 +35,13 @@ import network.chaintech.sdpcomposemultiplatform.ssp
 
 @Composable
 fun LoginWithPassword(
-    emailOrMobile: String,
-    onEmailOrMobileChange: (String) -> Unit,
+    mobileNumber: String,
+    onMobileNumberChange: (String) -> Unit,
     password: String,
     onPasswordChange: (String) -> Unit,
     passwordVisible: Boolean,
     submitPressed: Boolean,
+    validationShake: ValidationShakeState,
     onTogglePasswordVisible: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     onLoginClick: () -> Unit
@@ -79,29 +83,44 @@ fun LoginWithPassword(
         ) {
             Spacer(modifier = Modifier.height(24.sdp))
             AuthTextField(
-                label = resourceString(R.string.email_or_mobile),
-                value = emailOrMobile,
-                showValidation = submitPressed,
-                onValueChange = onEmailOrMobileChange,
-                placeholder = resourceString(R.string.example_email),
-                validationRules = listOf(
-                    ValidationRules.required("Email is required"),
-                    ValidationRules.email()
-                )
+                label = resourceString(R.string.mobile_number),
+                value = mobileNumber,
+                onValueChange = onMobileNumberChange,
+                placeholder = resourceString(R.string.mobile_number_placeholder),
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone,
+                fieldIndex = 0,
+                validationShake = validationShake,
+                leadingIcon = {
+                    Row(
+                        modifier = Modifier.wrapContentSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CoilImage(
+                            url = R.drawable.ic_flag,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(end = 12.sdp)
+                                .height(15.sdp)
+                                .width(23.sdp)
+                        )
+                        CoilImage(
+                            url = R.drawable.ic_divider,
+                            contentDescription = null,
+                            modifier = Modifier.height(15.sdp)
+                        )
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(24.sdp))
             AuthTextField(
                 label = resourceString(R.string.password),
                 value = password,
-                showValidation = submitPressed,
-                validationRules = listOf(
-                    ValidationRules.required("Password is required"),
-                    ValidationRules.passwordStrength()
-                ),
                 onValueChange = onPasswordChange,
                 placeholder = resourceString(R.string.input_your_password_account),
                 isPassword = true,
                 passwordVisible = passwordVisible,
+                fieldIndex = 1,
+                validationShake = validationShake,
                 onTrailingIconClick = onTogglePasswordVisible,
                 trailingIcon = {
                     CoilImage(

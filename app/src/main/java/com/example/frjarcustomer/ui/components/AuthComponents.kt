@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -181,38 +182,46 @@ fun AuthTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
-    validationRules: List<ValidationRule> = emptyList(),
-    showValidation: Boolean = false,
     prefixText: String? = null,
     isOptionalHeader: Boolean = false,
     enabled: Boolean = true,
-    onValidationChange: ((Boolean) -> Unit)? = null
+    fieldIndex: Int? = null,
+    validationShake: ValidationShakeState? = null,
 ) {
     val shape = RoundedCornerShape(8.dp)
-
-    val errorMessage = remember(value, showValidation) {
-        if (!showValidation && value.isEmpty()) return@remember null
-        validationRules.firstOrNull { !it.validate(value) }?.errorMessage
+    val shakeTrigger = when {
+        fieldIndex != null && validationShake != null && fieldIndex in validationShake.invalidIndices -> validationShake.triggerId
+        else -> 0
     }
-
-    val isError = errorMessage != null
-
-    LaunchedEffect(isError) {
-        onValidationChange?.invoke(!isError)
+    val shakeOffset = remember { Animatable(0f) }
+    LaunchedEffect(shakeTrigger) {
+        if (shakeTrigger > 0) {
+            shakeOffset.snapTo(0f)
+            shakeOffset.animateTo(
+                0f,
+                animationSpec = keyframes {
+                    durationMillis = 400
+                    0f at 0
+                    -12f at 50
+                    12f at 100
+                    -12f at 150
+                    12f at 200
+                    0f at 400
+                }
+            )
+        }
     }
-
     val borderColor by animateColorAsState(
-        targetValue = when {
-            isError -> ErrorRedLight.copy(0.8f)
-            value.isNotEmpty() -> TextPrimary
-            else -> AuthBorder
-        },
+        targetValue = if (value.isNotEmpty()) TextPrimary else AuthBorder,
         animationSpec = tween(durationMillis = 300),
         label = "borderColor"
     )
 
-    Column(modifier = modifier.fillMaxWidth()) {
-
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .graphicsLayer { translationX = shakeOffset.value }
+    ) {
         Row(Modifier.wrapContentSize(), verticalAlignment = Alignment.CenterVertically) {
             GenericText(
                 text = label,
@@ -227,8 +236,6 @@ fun AuthTextField(
                     fontSize = 10.ssp
                 )
             }
-
-
         }
 
         Box(
@@ -295,31 +302,6 @@ fun AuthTextField(
                 }
             )
         }
-
-        AnimatedVisibility(
-            visible = isError,
-            enter = fadeIn(tween(200)) + slideInVertically(
-                animationSpec = tween(250, easing = FastOutSlowInEasing),
-                initialOffsetY = { -it / 2 }
-            ),
-            exit = fadeOut(tween(150)) + slideOutVertically(
-                animationSpec = tween(200),
-                targetOffsetY = { -it / 2 }
-            )
-        ) {
-            Row(
-                modifier = Modifier.padding(top = 4.sdp, start = 4.sdp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.sdp)
-            ) {
-
-                GenericText(
-                    text = errorMessage ?: "",
-                    color = ErrorRedLight.copy(0.8f),
-                    fontSize = 9.ssp
-                )
-            }
-        }
     }
 }
 
@@ -362,17 +344,62 @@ object ValidationRules {
         ValidationRule(message, rule)
 }
 
+data class ValidationResult(
+    val firstErrorMessage: String,
+    val invalidIndices: List<Int>
+)
+
+data class ValidationShakeState(
+    val triggerId: Int = 0,
+    val invalidIndices: Set<Int> = emptySet()
+)
+
+object AuthValidation {
+    fun validate(fields: List<Pair<String, List<ValidationRule>>>): ValidationResult? {
+        val invalidIndices = mutableListOf<Int>()
+        var firstError: String? = null
+        fields.forEachIndexed { index, (value, rules) ->
+            val error = rules.firstOrNull { !it.validate(value) }?.errorMessage
+            if (error != null) {
+                invalidIndices.add(index)
+                if (firstError == null) firstError = error
+            }
+        }
+        return firstError?.let { ValidationResult(it, invalidIndices) }
+    }
+}
+
 @Composable
 fun OtpDigitsRow(
     otp: String,
     onOtpChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    shakeTrigger: Int = 0
 ) {
     val shape = RoundedCornerShape(6.sdp)
-    BasicTextField(
-        value = otp,
-        onValueChange = { onOtpChange(it.filter { c -> c.isDigit() }.take(4)) },
-        modifier = modifier,
+    val shakeOffset = remember { Animatable(0f) }
+    LaunchedEffect(shakeTrigger) {
+        if (shakeTrigger > 0) {
+            shakeOffset.snapTo(0f)
+            shakeOffset.animateTo(
+                0f,
+                animationSpec = keyframes {
+                    durationMillis = 400
+                    0f at 0
+                    -12f at 50
+                    12f at 100
+                    -12f at 150
+                    12f at 200
+                    0f at 400
+                }
+            )
+        }
+    }
+    Box(modifier = modifier.graphicsLayer { translationX = shakeOffset.value }) {
+        BasicTextField(
+            value = otp,
+            onValueChange = { onOtpChange(it.filter { c -> c.isDigit() }.take(4)) },
+            modifier = Modifier.fillMaxWidth(),
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         textStyle = MaterialTheme.typography.bodyMedium.copy(
@@ -424,6 +451,7 @@ fun OtpDigitsRow(
                 }
             }
         }
-    )
+        )
+    }
 }
 
