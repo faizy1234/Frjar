@@ -139,7 +139,7 @@ fun LoginAuthContainer(
                 when (page) {
                     0 -> OtpScreen(
                         onChangeNumberClick = onBackClick,
-                        onResend = { },
+                        onResend = { otpVm.resendOtp() },
                         onPrimaryClick = { otpVm.validateOtpAndProceed(onOtpVerified) },
                         viewModel = otpVm
                     )

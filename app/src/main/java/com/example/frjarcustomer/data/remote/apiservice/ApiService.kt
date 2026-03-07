@@ -5,6 +5,7 @@ import com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVer
 import com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse
 import com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO
 import com.example.frjarcustomer.data.remote.dto.response.onboarding.WalkThroughItemDto
+import com.example.frjarcustomer.data.remote.dto.response.otp.OtpResendResponse
 import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import com.example.frjarcustomer.data.remote.endpoints.Endpoints
 import com.example.frjarcustomer.data.remote.model.request.GenericBaseRequest
@@ -35,9 +36,9 @@ interface ApiService {
     @POST(Endpoints.GET_APP_VERSION)
     suspend fun checkAppVersion(
         @Body request: GenericBaseRequest
-    ):BaseResponse<CheckAppVersionDto>
+    ): BaseResponse<CheckAppVersionDto>
 
-   ////LOgin flow aPis
+    ////LOgin flow aPis
 
     @POST(Endpoints.SEND_LOGIN_OTP)
     suspend fun sendLoginOtp(@Body request: GenericBaseRequest): BaseResponse<UserResponse>
@@ -45,6 +46,7 @@ interface ApiService {
     @POST(Endpoints.LOGIN_WITH_PHONE)
     suspend fun loginWithPhone(@Body userRequest: GenericBaseRequest): BaseResponse<UserResponse>
 
-
+    @POST(Endpoints.USER_RESEND_OTP)
+    suspend fun userResendOtp(@Body request: GenericBaseRequest): BaseResponse<OtpResendResponse>
 
 }

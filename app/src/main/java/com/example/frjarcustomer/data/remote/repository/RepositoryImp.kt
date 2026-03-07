@@ -9,6 +9,7 @@ import com.example.frjarcustomer.core.fcm.FcmRepository
 import com.example.frjarcustomer.core.session.SessionManager
 import com.example.frjarcustomer.data.remote.apiservice.ApiService
 import com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse
+import com.example.frjarcustomer.data.remote.dto.response.otp.OtpResendResponse
 import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import com.example.frjarcustomer.data.remote.endpoints.Endpoints.NUMBER_PREFIX
 import com.example.frjarcustomer.data.remote.model.request.GenericBaseRequest
@@ -54,7 +55,7 @@ class RepositoryImp @Inject constructor(
             deviceId = fcmRepository.getDeviceId(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull(),
-            phone = if (phoneNumber != null) NUMBER_PREFIX+phoneNumber else null,
+            phone = if (phoneNumber != null) NUMBER_PREFIX + phoneNumber else null,
             password = if (isPasswordSignIn) password else null,
             firebaseToken = fcmRepository.getCurrentToken(),
             otp = if (!isPasswordSignIn) otp else null
@@ -161,6 +162,14 @@ class RepositoryImp @Inject constructor(
                 }
         }
 
+
+    override suspend fun userResendOtp(): Flow<ApiResult<BaseResponse<OtpResendResponse>>> =
+        safeApiCall(
+            ioDispatcher,
+            { apiService.userResendOtp(createBaseRequest(null)) },
+            stringProvider,
+            languageProvider.getLanguageCode()
+        ).ensureSuccessCode(languageProvider, stringProvider)
 
 }
 

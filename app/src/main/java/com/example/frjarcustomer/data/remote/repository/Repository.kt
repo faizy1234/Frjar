@@ -4,6 +4,7 @@ import com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingD
 import com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVersionDto
 import com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse
 import com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO
+import com.example.frjarcustomer.data.remote.dto.response.otp.OtpResendResponse
 import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import com.example.frjarcustomer.data.remote.endpoints.Endpoints
 import com.example.frjarcustomer.data.remote.model.request.GenericBaseRequest
@@ -24,11 +25,13 @@ interface Repository {
     suspend fun checkAppVersion(): Flow<ApiResult<BaseResponse<CheckAppVersionDto>>>
 
     suspend fun sendLoginOtp(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>>
-
     suspend fun loginWithPhone(
         phoneNumber: String? = null,
         password: String? = null,
         otp: String? = null,
         isPasswordSignIn: Boolean = false
     ): Flow<ApiResult<BaseResponse<UserResponse>>>
+
+    suspend fun userResendOtp(): Flow<ApiResult<BaseResponse<OtpResendResponse>>>
+
 }

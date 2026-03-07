@@ -214,10 +214,7 @@ fun OtpScreen(
                 if (countdownSeconds == 0) {
                     GenericText(
                         text = resourceString(R.string.resend),
-                        modifier = Modifier.clickable {
-                            viewModel.resetTimer()
-                            onResend()
-                        },
+                        modifier = Modifier.clickable { onResend() },
                         color = AuthTimerGreen
                     )
                 } else {

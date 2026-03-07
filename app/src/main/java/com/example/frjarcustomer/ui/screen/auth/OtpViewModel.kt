@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.typeOf
+
 @HiltViewModel
 class OtpViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -80,6 +81,41 @@ class OtpViewModel @Inject constructor(
         startTimer()
     }
 
+    fun resendOtp() {
+        viewModelScope.launch {
+            _isLoading.update { true }
+            repository.userResendOtp().collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading -> {
+
+                    }
+
+                    is ApiResult.Success -> {
+                        _isLoading.update { false }
+                        SnackbarController.show(
+                            SnackbarModel(
+                                type = MessageType.SUCCESS,
+                                message = MessageContent.PlainString(apiResult.data.appUpdateMessageLocalized)
+                            )
+                        )
+                        resetTimer()
+
+                    }
+
+                    is ApiResult.Error -> {
+                        _isLoading.update { false }
+                        SnackbarController.show(
+                            SnackbarModel(
+                                type = MessageType.ERROR,
+                                message = MessageContent.PlainString(apiResult.message)
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     fun validateOtpAndProceed(onSuccess: () -> Unit) {
         val result = AuthValidation.validate(
             listOf(
@@ -109,11 +145,12 @@ class OtpViewModel @Inject constructor(
                     isPasswordSignIn = false
                 ).collect { apiResult ->
                     when (apiResult) {
-                        is ApiResult.Loading -> { }
+                        is ApiResult.Loading -> {}
                         is ApiResult.Success -> {
                             _isLoading.update { false }
                             onSuccess()
                         }
+
                         is ApiResult.Error -> {
                             _isLoading.update { false }
                             SnackbarController.show(
