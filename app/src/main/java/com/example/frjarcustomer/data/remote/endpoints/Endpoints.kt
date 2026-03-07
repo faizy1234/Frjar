@@ -8,6 +8,7 @@ object Endpoints {
     const val GET_AUTH_TOKEN = "${PREFIX}customer/setting/getAuthToken"
     const val GET_APP_VERSION = "${PREFIX}customer/setting/checkAppVersion"
     const val SEND_LOGIN_OTP = "${PREFIX}user/sendLoginOtp"
+    const val LOGIN_WITH_PHONE = "${PREFIX}user/loginWithPhone"
 
 
 }

@@ -6,6 +6,7 @@ package com.example.frjarcustomer.data.local.datastore
  */
 object PreferencesKeys {
     const val USER_TOKEN = "user_token"
+    const val USER = "user"
     const val LANGUAGE = "language"
     const val USER_ID = "user_id"
     const val THEME_MODE = "theme_mode"

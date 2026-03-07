@@ -1,7 +1,6 @@
 package com.example.frjarcustomer.data.remote.repository
 
 import com.example.frjarcustomer.core.config.AppConfig
-import com.example.frjarcustomer.core.di.CoilModule
 import com.example.frjarcustomer.core.di.ImageCacheWarmer
 import com.example.frjarcustomer.core.di.IoDispatcher
 import com.example.frjarcustomer.core.di.LanguageProvider
@@ -9,12 +8,10 @@ import com.example.frjarcustomer.core.di.StringProvider
 import com.example.frjarcustomer.core.fcm.FcmRepository
 import com.example.frjarcustomer.core.session.SessionManager
 import com.example.frjarcustomer.data.remote.apiservice.ApiService
-import com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData
-import com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVersionDto
 import com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse
-import com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO
 import com.example.frjarcustomer.data.remote.dto.response.user.UserResponse
 import com.example.frjarcustomer.data.remote.model.request.GenericBaseRequest
+import com.example.frjarcustomer.data.remote.model.request.UserRequest
 import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.OnboardingData
 import com.example.frjarcustomer.data.remote.model.responseMaper.onboarding.toOnboardingData
 import com.example.frjarcustomer.data.remote.utils.ApiResult
@@ -38,11 +35,31 @@ class RepositoryImp @Inject constructor(
 ) : Repository {
 
     private suspend fun createBaseRequest(phoneNumber: String? = null) = GenericBaseRequest(
+        userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
         appVersion = appConfig.versionName.toDoubleOrNull(),
         phone = phoneNumber
     )
+
+    private suspend fun createUserRequest(
+        phoneNumber: String? = null,
+        password: String? = null,
+        otp: String? = null,
+        isPasswordSignIn: Boolean = false
+    ) =
+        GenericBaseRequest(
+            userId = sessionManager.getUser()?.userId ?: fcmRepository.getDeviceId(),
+            deviceId = fcmRepository.getDeviceId(),
+            appLang = languageProvider.getLanguageCode(),
+            appVersion = appConfig.versionName.toDoubleOrNull(),
+            phone = phoneNumber,
+            password = if (isPasswordSignIn) password else null,
+            firebaseToken = fcmRepository.getCurrentToken(),
+            otp = if (!isPasswordSignIn) otp else null
+
+        )
+
 
     override suspend fun getCustomerAppSetting(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData>>> =
         safeApiCall(
@@ -76,22 +93,23 @@ class RepositoryImp @Inject constructor(
                 }
             }
 
-    override suspend fun getAuthToken(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO>>> = flow {
-        safeApiCall(
-            ioDispatcher,
-            { apiService.getAuthToken(createBaseRequest()) },
-            stringProvider,
-            languageProvider.getLanguageCode()
-        ).ensureSuccessCode(languageProvider, stringProvider)
-            .collect { result ->
-                if (result is ApiResult.Success) result.data.data?.token?.let {
-                    sessionManager.setToken(
-                        it
-                    )
+    override suspend fun getAuthToken(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.getToken.GetTokenDTO>>> =
+        flow {
+            safeApiCall(
+                ioDispatcher,
+                { apiService.getAuthToken(createBaseRequest()) },
+                stringProvider,
+                languageProvider.getLanguageCode()
+            ).ensureSuccessCode(languageProvider, stringProvider)
+                .collect { result ->
+                    if (result is ApiResult.Success) result.data.data?.token?.let {
+                        sessionManager.setToken(
+                            it
+                        )
+                    }
+                    emit(result)
                 }
-                emit(result)
-            }
-    }
+        }
 
     override suspend fun checkAppVersion(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appversion.CheckAppVersionDto>>> =
         safeApiCall(
@@ -108,4 +126,42 @@ class RepositoryImp @Inject constructor(
             stringProvider,
             languageProvider.getLanguageCode()
         ).ensureSuccessCode(languageProvider, stringProvider)
+
+    override suspend fun loginWithPhone(
+        phoneNumber: String?,
+        password: String?,
+        otp: String?,
+        isPasswordSignIn: Boolean
+    ): Flow<ApiResult<BaseResponse<UserResponse>>> =
+        flow {
+            safeApiCall(
+                ioDispatcher,
+                {
+                    apiService.loginWithPhone(
+                        createUserRequest(
+                            phoneNumber = phoneNumber,
+                            password = password,
+                            otp = otp,
+                            isPasswordSignIn = isPasswordSignIn
+                        )
+                    )
+                },
+                stringProvider,
+                languageProvider.getLanguageCode()
+            ).ensureSuccessCode(languageProvider, stringProvider)
+                .collect { result ->
+                    if (result is ApiResult.Success) result.data.data?.let {
+                        sessionManager.setToken(
+                            it.token
+                        )
+                        sessionManager.setUser(it)
+                    }
+                    emit(result)
+                }
+        }
+
+
 }
+
+
+
