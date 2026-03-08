@@ -55,7 +55,7 @@ fun NavGraphBuilder.navigationAuthGraph(
 
         composable<AppRoute.Login> {
             LoginScreen(
-                moveToHome = { navigateToHome(navHostController) },
+                onBack = { navHostController.navigateUp() },
                 moveToSignUpOtp = { phoneNumber ->
                     navHostController.navigate(
                         AppRoute.OtpScreen(

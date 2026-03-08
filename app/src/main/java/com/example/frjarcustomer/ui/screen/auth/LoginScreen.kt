@@ -5,6 +5,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,7 @@ import network.chaintech.sdpcomposemultiplatform.ssp
 
 @Composable
 fun LoginScreen(
-    moveToHome: () -> Unit,
+    onBack: () -> Unit,
     moveToSignUpOtp: (String) -> Unit,
     moveToForgetPassword: () -> Unit,
     moveToOtp: (String) -> Unit,
@@ -127,6 +128,9 @@ fun LoginScreen(
                     .align(Alignment.TopStart)
                     .height(34.sdp)
                     .width(26.sdp)
+                    .clickable{
+                        onBack.invoke()
+                    }
             )
 
 
