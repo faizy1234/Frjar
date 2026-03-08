@@ -85,7 +85,6 @@ fun LoginScreen(
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = false)
     val keyboardController = LocalSoftwareKeyboardController.current
 
-
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier

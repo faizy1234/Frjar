@@ -334,8 +334,8 @@ object ValidationRules {
     fun noSpecialChars(message: String = "Special characters are not allowed") =
         ValidationRule(message) { it.matches(Regex("^[a-zA-Z0-9 ]*$")) }
 
-    fun passwordStrength(message: String = "Password must be 8+ chars with a number") =
-        ValidationRule(message) { it.length >= 8 && it.any { c -> c.isDigit() } }
+    fun passwordStrength(message: String = "Password must be at least 6 characters") =
+        ValidationRule(message) { it.length >= 6 }
 
     fun match(other: String, message: String = "Values do not match") =
         ValidationRule(message) { it == other }
