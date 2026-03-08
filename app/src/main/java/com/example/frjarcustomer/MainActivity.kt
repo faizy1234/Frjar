@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
             val currentLanguage by mainActivityVm.currentLanguage.collectAsStateWithLifecycle(
                 initialValue = AppLanguage.DEFAULT
             )
-            FrjarTheme(currentLanguage = currentLanguage) {
+            FrjarTheme(currentLanguage = currentLanguage, darkTheme = false) {
                 val navController = rememberNavController()
                 val topLevelDestination = listOf(
                     TopLevelDestination.HomeScreenNavigationRoute,

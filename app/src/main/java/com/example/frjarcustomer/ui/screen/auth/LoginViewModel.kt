@@ -1,16 +1,21 @@
 package com.example.frjarcustomer.ui.screen.auth
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.core.location.LocationStoreHelper
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
+import com.example.frjarcustomer.navigation.routes.AppRoute
 import com.example.frjarcustomer.ui.components.AuthValidation
 import com.example.frjarcustomer.ui.components.ValidationRules
 import com.example.frjarcustomer.ui.components.ValidationShakeState
+import com.example.frjarcustomer.utils.UserinfoManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,10 +26,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    private val locationStoreHelper: LocationStoreHelper,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _selectedTabIndex = MutableStateFlow(0)
+
+    val previousRouteTab = savedStateHandle.toRoute<AppRoute.Login>().initialTab
+    private val _selectedTabIndex = MutableStateFlow(previousRouteTab)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
 
     private val _mobileNumber = MutableStateFlow("")
@@ -75,10 +84,14 @@ class LoginViewModel @Inject constructor(
                     val phone = _mobileNumber.value
                     sendLoginOtp(phone = phone, moveToOtp = { moveToOtp(phone) })
                 }
+
                 1 -> {
                     val phone = _mobileNumber.value
-                    registerWithPhoneApi(phone = phone, moveToSignUpOtp = { moveToSignUpOtp(phone) })
+                    registerWithPhoneApi(
+                        phone = phone,
+                        moveToSignUpOtp = { moveToSignUpOtp(phone) })
                 }
+
                 else -> moveToOtp(_mobileNumber.value)
             }
         }
@@ -95,12 +108,15 @@ class LoginViewModel @Inject constructor(
                     is ApiResult.Loading -> {
 
                     }
+
                     is ApiResult.Success -> {
+                        UserinfoManager.init(apiResult.data.data?.userId)
                         _isLoading.update { false }
                         moveToOtp(phone)
                     }
 
                     is ApiResult.Error -> {
+                        UserinfoManager.resetState()
                         _isLoading.update { false }
                         SnackbarController.show(
                             SnackbarModel(
@@ -122,12 +138,17 @@ class LoginViewModel @Inject constructor(
             _isLoading.update { true }
             repository.registerWithPhone(phone).collect { apiResult ->
                 when (apiResult) {
-                    is ApiResult.Loading -> { }
+                    is ApiResult.Loading -> {}
                     is ApiResult.Success -> {
+                        UserinfoManager.init(apiResult.data.data?.userId)
+
                         _isLoading.update { false }
                         moveToSignUpOtp(phone)
                     }
+
                     is ApiResult.Error -> {
+                        UserinfoManager.resetState()
+
                         _isLoading.update { false }
                         SnackbarController.show(
                             SnackbarModel(
@@ -141,6 +162,17 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun onLocationPermissionGranted() {
+        viewModelScope.launch {
+            locationStoreHelper.fetchAndSaveLocation()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        UserinfoManager.resetState()
+
+    }
 
 
 }

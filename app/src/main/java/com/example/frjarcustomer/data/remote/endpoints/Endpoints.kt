@@ -13,6 +13,7 @@ object Endpoints {
     const val USER_RESEND_OTP = "${PREFIX}user/resendOtp"
     const val REGISTER_WITH_PHONE = "${PREFIX}user/registerWithPhone"
     const val USER_VERIFICATION = "${PREFIX}user/uservarification"
+    const val USER_REGISTER= "${PREFIX}user/register"
 
 
 

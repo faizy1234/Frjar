@@ -1,5 +1,6 @@
 package com.example.frjarcustomer.ui.screen.dashedboard.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,55 +22,22 @@ import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarDuration
 import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.appstate.resourceString
+import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 
 @Composable
 fun HomeScreen(
-    onNavigateToDetail: (String) -> Unit,
-    onNavigateToProfile: (userId: String, tab: Int) -> Unit,
-    onNavigateToAppFeature: () -> Unit = {},
-    onNavigateToVersionExpire: () -> Unit = {},
-    onNavigateToNoConnection: () -> Unit = {},
 
-    onNavigateToAuth: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
+            .background(AuthScreenBackground)
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = onNavigateToAuth) {
-            Text(resourceString(R.string.auth))
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick ={
-            SnackbarController.show(
-                SnackbarModel(
-                    type = MessageType.SUCCESS,
-                    message = MessageContent.PlainString("Copied to clipboard"),
-                    duration = SnackbarDuration.SHORT
-                )
-            )
-        }) {
-            Text("New Features")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = {
-            SnackbarController.show(
-                SnackbarModel(
-                    type = MessageType.ERROR,
-                    message = MessageContent.PlainString("Copied to clipboard"),
-                    duration = SnackbarDuration.SHORT
-                )
-            )
 
-        }) {
-            Text("Version Expire")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToNoConnection) {
-            Text("No Connection")
-        }
+        Text("Home Screen")
+
     }
 }

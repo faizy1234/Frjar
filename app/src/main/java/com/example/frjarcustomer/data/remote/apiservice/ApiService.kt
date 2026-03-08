@@ -58,4 +58,8 @@ interface ApiService {
     @POST(Endpoints.USER_VERIFICATION)
     suspend fun userVerification(@Body request: GenericBaseRequest): BaseResponse<UserResponse>
 
+
+    @POST(Endpoints.USER_REGISTER)
+    suspend fun userRegister(@Body request: GenericBaseRequest): BaseResponse<UserResponse>
+
 }

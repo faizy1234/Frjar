@@ -42,5 +42,9 @@ interface Repository {
 
     suspend fun registerWithPhone(phoneNumber: String?): Flow<ApiResult<BaseResponse<UserResponse>>>
 
+    suspend fun userRegister(
+        email: String, phoneNumber: String, password: String
+    ): Flow<ApiResult<BaseResponse<UserResponse>>>
+
 
 }

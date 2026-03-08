@@ -16,4 +16,6 @@ object PreferencesKeys {
     const val APP_LANGUAGE = "app_language"
     const val FCM_TOKEN = "fcm_token"
     const val DEVICE_ID = "device_id"
+    const val LATITUDE = "latitude"
+    const val LONGITUDE = "longitude"
 }

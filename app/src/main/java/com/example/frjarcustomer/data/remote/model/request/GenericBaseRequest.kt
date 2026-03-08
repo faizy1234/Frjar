@@ -3,6 +3,7 @@ package com.example.frjarcustomer.data.remote.model.request
 import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.CUSTOMER
 import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.PLATFORM_VALUE
 import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.SEGMENT_TYPE_VALUE
+import com.example.frjarcustomer.core.network.AuthInterceptor.Companion.STANDARD_TYPE
 import com.google.gson.annotations.SerializedName
 
 
@@ -23,6 +24,9 @@ data class GenericBaseRequest(
     val appLang: String? = null,
     @SerializedName("phone")
     val phone: String? = null,
+    @SerializedName("email")
+    val email: String? = null,
+
 
     @SerializedName("user_type")
     val userType: String? = CUSTOMER,
@@ -46,7 +50,7 @@ data class GenericBaseRequest(
     val longitude: String? = null,
 
     @SerializedName("login_type")
-    val loginType: String? = null,
+    val loginType: String? = STANDARD_TYPE,
 
     @SerializedName("social_id")
     val socialId: String? = null,

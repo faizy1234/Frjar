@@ -14,6 +14,9 @@ interface SessionManager {
     suspend fun setUser(user: com.example.frjarcustomer.data.remote.dto.response.user.UserResponse?)
     suspend fun setLanguage(language: String?)
 
+    suspend fun getLatitude(): String?
+    suspend fun getLongitude(): String?
+
     fun setLanguageInMemory(code: String?)
 
     /** Load token and language from DataStore into memory. Call at app start. */

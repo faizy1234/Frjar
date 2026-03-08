@@ -42,6 +42,8 @@ val TextOnAccent = Color(0xFF1A1A1A)
 val TextColorAr = Color(0xFF475467)
 val TextOptional = Color(0xFFBEBEBE)
 val TextSelectBottom = Color(0xFF304461)
+val BottomIconLight = Color(0xFFA6A6A6)
+val BottomIconDark = Color(0xFF020D16)
 
 // Button
 val ButtonPrimary = Color(0xFFFFD13D)

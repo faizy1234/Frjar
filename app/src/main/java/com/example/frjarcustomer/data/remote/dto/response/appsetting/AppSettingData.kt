@@ -67,6 +67,8 @@ data class AppSettingData(
     @SerializedName("sales_dept_no") val salesDeptNo: String? = null,
     @SerializedName("address") val address: String? = null,
     @SerializedName("address_ar") val addressAr: String? = null,
+    @SerializedName("address_ur") val addressUr: String? = null,
+    @SerializedName("address_hi") val addressHi: String? = null,
     @SerializedName("comp_lat") val compLat: Double? = null,
     @SerializedName("comp_lng") val compLng: Double? = null,
     @SerializedName("customer_support_email") val customerSupportEmail: String? = null,
@@ -124,6 +126,16 @@ data class AppSettingData(
             AppLanguage.ENGLISH.value -> appMaintenanceMessageEn
             null -> appMaintenanceMessageEn
             else -> appMaintenanceMessageEn
+        } ?: "")
+
+    val addressLocalized: String
+        get() = (when (LocaleManager.currentLanguage) {
+            AppLanguage.ARABIC.value -> addressAr ?: address
+            AppLanguage.HINDI.value -> addressHi ?: address
+            AppLanguage.URDU.value -> addressUr ?: address
+            AppLanguage.ENGLISH.value -> address
+            null -> address
+            else -> address
         } ?: "")
 
     val appUpdateMessageLocalized: String
