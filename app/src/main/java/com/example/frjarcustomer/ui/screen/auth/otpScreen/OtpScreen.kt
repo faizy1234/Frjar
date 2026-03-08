@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -38,6 +41,7 @@ import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
 import com.example.frjarcustomer.ui.components.OtpDigitsRow
+import com.example.frjarcustomer.ui.components.OverlayLoader
 import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.screen.auth.OtpViewModel
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
@@ -59,9 +63,12 @@ fun OtpScreen(
     onResend: () -> Unit,
     onPrimaryClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: OtpViewModel
+    viewModel: OtpViewModel,
+    isInnerLoaderEnable: Boolean = true,
 ) {
     val otpContent = viewModel.otpScreenContent
+    val loading = viewModel.isLoading.collectAsStateWithLifecycle()
+    val isResenLoading = viewModel.isResendLoading.collectAsStateWithLifecycle()
     val otp by viewModel.otp.collectAsStateWithLifecycle()
     val countdownSeconds by viewModel.countdownSeconds.collectAsStateWithLifecycle()
     val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
@@ -101,133 +108,145 @@ fun OtpScreen(
         pop()
     }
 
-    Scaffold(
-        modifier = modifier
-            .background(AuthScreenBackground)
-            .fillMaxSize()
-            .padding(horizontal = horizontalPadding)
-            .systemBarsPadding()
-            .pointerInput(Unit) {
-                detectTapGestures { keyboardController?.hide() }
-            },
-        containerColor = AuthScreenBackground,
 
-        topBar = {
-            if (isSignup){
-                Row(modifier = Modifier
-                    .padding(bottom = 10.sdp)
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    CoilImage(
-                        url = R.drawable.ic_close_back,
-                        contentDescription = null,
+    Box(){
+
+        Scaffold(
+            modifier = modifier
+                .background(AuthScreenBackground)
+                .fillMaxSize()
+                .padding(horizontal = horizontalPadding)
+                .systemBarsPadding()
+                .pointerInput(Unit) {
+                    detectTapGestures { keyboardController?.hide() }
+                },
+            containerColor = AuthScreenBackground,
+
+            topBar = {
+                if (isSignup) {
+                    Row(
                         modifier = Modifier
-                            .height(34.sdp)
-                            .width(26.sdp)
-                            .clickable { onChangeNumberClick()},
-                        mirrorInRtl = true
+                            .padding(bottom = 10.sdp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        CoilImage(
+                            url = R.drawable.ic_close_back,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .height(34.sdp)
+                                .width(26.sdp)
+                                .clickable { onChangeNumberClick() },
+                            mirrorInRtl = true
+                        )
+                    }
+                }
+
+
+            },
+            bottomBar = {
+                GenericButton(
+                    onClick = onPrimaryClick,
+                    modifier = Modifier
+                        .padding(bottom = 16.sdp)
+                        .fillMaxWidth()
+                        .height(56.dpScaled()),
+                    backgroundColor = ButtonPrimary,
+                    contentColor = TextOnAccent,
+                    shape = RoundedCornerShape(8.dpScaled()),
+                    content = {
+                        otpContent.primaryButtonText?.let {
+                            GenericText(
+                                text = resourceString(it),
+                                fontSize = 16.spScaled(),
+                                color = TextOnAccent
+                            )
+                        }
+
+                    }
+                )
+            }
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(padding)
+            ) {
+                Spacer(modifier = Modifier.height(24.sdp))
+                otpContent.titleText?.let {
+                    GenericText(
+                        text = resourceString(it),
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = TextPrimary,
+                        textAlign = TextAlign.Center
                     )
                 }
-            }
 
+                Spacer(modifier = Modifier.height(6.sdp))
 
-        },
-        bottomBar = {
-            GenericButton(
-                onClick = onPrimaryClick,
-                modifier = Modifier
-                    .padding(bottom = 16.sdp)
-                    .fillMaxWidth()
-                    .height(56.dpScaled()),
-                backgroundColor = ButtonPrimary,
-                contentColor = TextOnAccent,
-                shape = RoundedCornerShape(8.dpScaled()),
-                content = {
-                    otpContent.primaryButtonText?.let {
+                ClickableText(
+                    text = annotatedString,
+                    style = TextStyle(
+                        fontSize = 14.spScaled(),
+                        color = TextGreyscale500,
+                        textAlign = TextAlign.Center
+                    ),
+                    onClick = { offset ->
+                        annotatedString.getStringAnnotations(
+                            tag = "CHANGE_NUMBER",
+                            start = offset,
+                            end = offset
+                        ).firstOrNull()?.let { onChangeNumberClick() }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 18.sdp)
+                )
+
+                Spacer(modifier = Modifier.height(22.sdp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    GenericText(
+                        text = resourceString(R.string.verification_code),
+                        fontSize = 14.spScaled(),
+                        color = TextBlackDark,
+                        fontWeight = FontWeight.W500
+                    )
+                    if (countdownSeconds == 0 && !isResenLoading.value) {
+
                         GenericText(
-                            text = resourceString(it),
-                            fontSize = 16.spScaled(),
-                            color = TextOnAccent
+                            text = resourceString(R.string.resend),
+                            modifier = Modifier.clickable { onResend() },
+                            fontSize = 14.spScaled(),
+                            color = TextBlackDark,
+                            fontWeight = FontWeight.W500
+                        )
+                    } else if (isResenLoading.value) {
+
+                        GenericText(
+                            text = resourceString(R.string.resending),
+                            fontSize = 14.spScaled(),
+                            color = TextBlackDark,
+                            fontWeight = FontWeight.W500
                         )
                     }
 
+
                 }
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(padding)
-        ) {
-            Spacer(modifier = Modifier.height(24.sdp))
-            otpContent.titleText?.let {
-                GenericText(
-                    text = resourceString(it),
+                Spacer(modifier = Modifier.height(7.sdp))
+                OtpDigitsRow(
+                    otp = otp,
+                    onOtpChange = { viewModel.setOtp(it) }
+                )
+                Spacer(modifier = Modifier.height(10.sdp))
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = TextPrimary,
-                    textAlign = TextAlign.Center
-                )
-            }
+                    horizontalArrangement =  Arrangement.SpaceBetween
+                ) {
 
-            Spacer(modifier = Modifier.height(6.sdp))
-
-            ClickableText(
-                text = annotatedString,
-                style = TextStyle(
-                    fontSize = 14.spScaled(),
-                    color = TextGreyscale500,
-                    textAlign = TextAlign.Center
-                ),
-                onClick = { offset ->
-                    annotatedString.getStringAnnotations(
-                        tag = "CHANGE_NUMBER",
-                        start = offset,
-                        end = offset
-                    ).firstOrNull()?.let { onChangeNumberClick() }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.sdp)
-            )
-
-            Spacer(modifier = Modifier.height(22.sdp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                GenericText(
-                    text = resourceString(R.string.verification_code),
-                    fontSize = 14.spScaled(),
-                    color = TextBlackDark,
-                    fontWeight = FontWeight.W500
-                )
-                GenericText(
-                    text = resourceString(R.string.resending),
-                    fontSize = 14.spScaled(),
-                    color = TextBlackDark,
-                    fontWeight = FontWeight.W500
-                )
-            }
-            Spacer(modifier = Modifier.height(7.sdp))
-            OtpDigitsRow(
-                otp = otp,
-                onOtpChange = { viewModel.setOtp(it) }
-            )
-            Spacer(modifier = Modifier.height(10.sdp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = if (countdownSeconds == 0) Arrangement.End else Arrangement.SpaceBetween
-            ) {
-                if (countdownSeconds == 0) {
-                    GenericText(
-                        text = resourceString(R.string.resend),
-                        modifier = Modifier.clickable { onResend() },
-                        color = AuthTimerGreen
-                    )
-                } else {
                     GenericText(
                         text = resourceString(R.string.send_code_reload_in),
                         fontSize = 12.spScaled(),
@@ -240,10 +259,25 @@ fun OtpScreen(
                         fontWeight = FontWeight.W500,
                         color = AuthTimerGreen
                     )
+
+
                 }
-
-
             }
         }
+
+        if (isInnerLoaderEnable && loading.value) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                OverlayLoader()
+            }
+        }
+
+
     }
+
+
 }

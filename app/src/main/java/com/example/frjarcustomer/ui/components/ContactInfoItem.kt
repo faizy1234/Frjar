@@ -52,10 +52,10 @@ fun ImageGalleryRow(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(377.dp)
+            .height(264.dp)
             .clip(
                 RoundedCornerShape(
-                    topStart = 16.sdp,
+                    topStart = 18.sdp,
                     topEnd = 0.dp,
                     bottomStart = 0.dp,
                     bottomEnd = 0.dp
@@ -111,16 +111,16 @@ fun ContactInfoRow(
             GenericText(
                 text = item.title,
                 color = TextBlackDarkTitle,
-                fontSize = 11.ssp,
+                fontSize = 10.ssp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.SemiBold,
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(5.sdp))
             GenericText(
                 text =  item.subtitle,
                 color = TextGreyscale500,
-                fontSize = 10.ssp,
+                fontSize = 9.ssp,
                 fontWeight = FontWeight.Normal,
                 lineHeight = 18.sp
             )

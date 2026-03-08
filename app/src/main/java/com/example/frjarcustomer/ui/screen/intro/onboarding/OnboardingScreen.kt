@@ -156,7 +156,7 @@ fun OnboardingPageContent(
                         text = title,
                         color = TextPrimary,
                         fontSize = 15.ssp,
-                        fontWeight = FontWeight.W500,
+                        fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 25.sdp)

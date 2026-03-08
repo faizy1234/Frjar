@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.get
 import com.example.frjarcustomer.appstate.AppLanguage
@@ -57,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             val currentLanguage by mainActivityVm.currentLanguage.collectAsStateWithLifecycle(
                 initialValue = AppLanguage.DEFAULT

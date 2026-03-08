@@ -142,7 +142,8 @@ fun LoginAuthContainer(
                         onChangeNumberClick = onBackClick,
                         onResend = { otpVm.resendOtp() },
                         onPrimaryClick = { otpVm.validateOtpAndProceed(onOtpVerified) },
-                        viewModel = otpVm
+                        viewModel = otpVm,
+                        isInnerLoaderEnable = false
                     )
 
                     1 -> LoginWithPassword(
@@ -161,7 +162,7 @@ fun LoginAuthContainer(
             }
         }
     }
-        if (loginLoading || otpLoading) {
+        if (loginLoading|| otpLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

@@ -41,7 +41,8 @@
             android:name="com.example.frjarcustomer.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Nia.Splash">
+            android:theme="@style/Theme.Nia.Splash"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

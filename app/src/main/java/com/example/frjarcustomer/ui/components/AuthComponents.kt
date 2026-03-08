@@ -257,7 +257,10 @@ fun AuthTextField(
                     .align(Alignment.CenterStart),
                 singleLine = true,
                 visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-                keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else keyboardType),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = if (isPassword) KeyboardType.Password else keyboardType,
+                    autoCorrect = false
+                ),
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     color = TextPrimary,
                     fontSize = 11.ssp,

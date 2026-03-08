@@ -127,13 +127,13 @@ fun ReachOutScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 14.sdp)
+                    .padding(horizontal = 18.sdp)
             ) {
                 GenericText(
                     text = resourceString(R.string.reach_out_to_us),
 
                     color = TextBlackDarkTitle,
-                    fontSize = 16.ssp,
+                    fontSize = 15.ssp,
                     fontWeight = FontWeight.SemiBold,
                 )
 

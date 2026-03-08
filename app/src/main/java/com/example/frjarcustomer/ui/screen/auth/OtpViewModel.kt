@@ -46,7 +46,7 @@ class OtpViewModel @Inject constructor(
     private val _otp = MutableStateFlow("")
     val otp: StateFlow<String> = _otp.asStateFlow()
 
-    private val _countdownSeconds = MutableStateFlow(90)
+    private val _countdownSeconds = MutableStateFlow(10)
     val countdownSeconds: StateFlow<Int> = _countdownSeconds.asStateFlow()
 
     private val _validationShake = MutableStateFlow(ValidationShakeState())
@@ -54,6 +54,8 @@ class OtpViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    private val _isResendLoading = MutableStateFlow(false)
+    val isResendLoading: StateFlow<Boolean> = _isResendLoading.asStateFlow()
 
     private var timerJob: Job? = null
 
@@ -76,13 +78,13 @@ class OtpViewModel @Inject constructor(
     }
 
     fun resetTimer() {
-        _countdownSeconds.update { 90 }
+        _countdownSeconds.update { 10 }
         startTimer()
     }
 
     fun resendOtp() {
         viewModelScope.launch {
-            _isLoading.update { true }
+            _isResendLoading.update { true }
             repository.userResendOtp().collect { apiResult ->
                 when (apiResult) {
                     is ApiResult.Loading -> {
@@ -90,7 +92,7 @@ class OtpViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        _isLoading.update { false }
+                        _isResendLoading.update { false }
                         SnackbarController.show(
                             SnackbarModel(
                                 type = MessageType.SUCCESS,
@@ -102,7 +104,7 @@ class OtpViewModel @Inject constructor(
                     }
 
                     is ApiResult.Error -> {
-                        _isLoading.update { false }
+                        _isResendLoading.update { false }
                         SnackbarController.show(
                             SnackbarModel(
                                 type = MessageType.ERROR,

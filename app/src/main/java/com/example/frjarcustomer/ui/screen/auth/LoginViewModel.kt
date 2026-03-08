@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.core.di.StringProvider
 import com.example.frjarcustomer.core.location.LocationStoreHelper
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
@@ -28,6 +30,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val repository: Repository,
     private val locationStoreHelper: LocationStoreHelper,
+    private val stringProvider: StringProvider,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -62,9 +65,10 @@ class LoginViewModel @Inject constructor(
         val result = AuthValidation.validate(
             listOf(
                 _mobileNumber.value to listOf(
-                    ValidationRules.required("Mobile number is required"),
-                    ValidationRules.custom("Must be 9 digits") { it.length == 9 },
-                    ValidationRules.custom("This number must start with 5") { it.isNotEmpty() && it.first() == '5' }
+                    ValidationRules.required("Mobile number is Required"),
+                    ValidationRules.custom(stringProvider.getString(R.string.phone_number_must_be_9_digits)) { it.length == 9 },
+
+                    ValidationRules.custom(stringProvider.getString(R.string.mobile_number_should_start_from_5)) { it.isNotEmpty() && it.first() == '5' }
                 )
             )
         )
