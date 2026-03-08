@@ -13,6 +13,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -85,6 +88,8 @@ fun ForgetPasswordScreen(
     val confirmPassword by viewModel.confirmPassword.collectAsState()
     val newPasswordVisible by viewModel.newPasswordVisible.collectAsState()
     val confirmPasswordVisible by viewModel.confirmPasswordVisible.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     BackHandler() {
         if (step == ForgetPasswordStep.MethodSelect) {
@@ -99,6 +104,9 @@ fun ForgetPasswordScreen(
             .fillMaxSize()
             .background(AuthScreenBackground)
             .statusBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures { keyboardController?.hide() }
+            }
     ) {
         AnimatedContent(
             targetState = step,

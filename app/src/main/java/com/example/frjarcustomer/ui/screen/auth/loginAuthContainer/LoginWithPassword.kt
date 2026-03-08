@@ -2,6 +2,7 @@ package com.example.frjarcustomer.ui.screen.auth.loginAuthContainer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.image.CoilImage
@@ -46,12 +49,18 @@ fun LoginWithPassword(
     onForgotPasswordClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+
     Scaffold(
         modifier = Modifier
             .background(AuthScreenBackground)
             .fillMaxSize()
             .padding(horizontal = 9.sdp)
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures { keyboardController?.hide() }
+            },
         containerColor = AuthScreenBackground,
         bottomBar = {
             GenericButton(

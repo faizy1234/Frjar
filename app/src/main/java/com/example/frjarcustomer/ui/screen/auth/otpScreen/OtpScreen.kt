@@ -2,6 +2,7 @@ package com.example.frjarcustomer.ui.screen.auth.otpScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -61,6 +64,8 @@ fun OtpScreen(
     val otp by viewModel.otp.collectAsStateWithLifecycle()
     val countdownSeconds by viewModel.countdownSeconds.collectAsStateWithLifecycle()
     val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val otpShakeTrigger = if (0 in validationShake.invalidIndices) validationShake.triggerId else 0
     val isSignup = otpContent.isSignup
     val horizontalPadding = if (isSignup) 18.sdp else 9.sdp
@@ -100,7 +105,10 @@ fun OtpScreen(
             .background(AuthScreenBackground)
             .fillMaxSize()
             .padding(horizontal = horizontalPadding)
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures { keyboardController?.hide() }
+            },
         containerColor = AuthScreenBackground,
 
         topBar = {

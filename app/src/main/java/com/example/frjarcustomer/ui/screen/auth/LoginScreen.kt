@@ -1,6 +1,7 @@
 package com.example.frjarcustomer.ui.screen.auth
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +26,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.frjarcustomer.R
@@ -59,6 +62,9 @@ fun LoginScreen(
     val mobileNumber by viewModel.mobileNumber.collectAsState()
     val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = false)
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -67,6 +73,10 @@ fun LoginScreen(
                 .background(AuthScreenBackground)
                 .statusBarsPadding()
                 .padding(horizontal = 12.sdp)
+                .imePadding()
+                .pointerInput(Unit) {
+                    detectTapGestures { keyboardController?.hide() }
+                }
         ) {
         Spacer(modifier = Modifier.height(20.sdp))
 
