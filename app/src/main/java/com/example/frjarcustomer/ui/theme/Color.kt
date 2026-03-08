@@ -44,6 +44,7 @@ val TextOptional = Color(0xFFBEBEBE)
 val TextSelectBottom = Color(0xFF304461)
 val BottomIconLight = Color(0xFFA6A6A6)
 val BottomIconDark = Color(0xFF020D16)
+val DescriptionColor = Color(0xFF757575)
 
 // Button
 val ButtonPrimary = Color(0xFFFFD13D)

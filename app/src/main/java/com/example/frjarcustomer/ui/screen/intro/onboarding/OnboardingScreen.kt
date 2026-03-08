@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.onFirstVisible
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -58,6 +59,7 @@ import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
 import com.example.frjarcustomer.ui.theme.ButtonSecondary
+import com.example.frjarcustomer.ui.theme.DescriptionColor
 import com.example.frjarcustomer.ui.theme.InterFontFamily
 import com.example.frjarcustomer.ui.theme.Screen_background_Root
 import com.example.frjarcustomer.ui.theme.TextOnAccent
@@ -111,7 +113,13 @@ fun OnboardingPageContent(
         Spacer(modifier = Modifier.height(100.sdp))
         onboardingPages.pages?.getOrNull(pageNumber)?.imageRes?.let {image->
             AnimatedVisibility(
+
                 visible = animateImage,
+                modifier = Modifier
+                    .height(190.sdp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.sdp),
+
                 enter = slideInVertically(
                     animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
                     initialOffsetY = { -it }
@@ -121,9 +129,8 @@ fun OnboardingPageContent(
                     url = image,
 
                     contentDescription = null,
-                    modifier = Modifier
-                        .height(200.sdp)
-                        .padding(horizontal = 12.sdp)
+                    modifier = Modifier.fillMaxSize()
+
                 )
             }
 
@@ -148,11 +155,11 @@ fun OnboardingPageContent(
                     GenericText(
                         text = title,
                         color = TextPrimary,
-                        fontSize = 18.ssp,
-                        fontWeight = FontWeight.W600,
-                        style = MaterialTheme.typography.titleLarge,
+                        fontSize = 15.ssp,
+                        fontWeight = FontWeight.W500,
+                        style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.sdp)
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 25.sdp)
                     )
 
 
@@ -173,11 +180,11 @@ fun OnboardingPageContent(
 
                     GenericText(
                         text = description,
-                        color = TextSecondary,
-                        fontSize = 11.ssp,
+                        color = DescriptionColor,
+                        fontSize = 10.ssp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .padding(horizontal = 40.sdp)
+                            .padding(horizontal = 25.sdp)
                             .fillMaxWidth()
                     )
                 }
@@ -237,7 +244,7 @@ fun CarouselScreen(
 //                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
 //                    }
                 },
-                backgroundColor = if (isLastPage) ButtonPrimary else Color.Transparent,
+                backgroundColor = if (isLastPage) Transparent else Color.Transparent,
                 contentColor = TextOnAccent,
                 elevation = 0.dp,
                 modifier = Modifier
@@ -246,12 +253,11 @@ fun CarouselScreen(
                     .height(35.sdp)
             ) {
                 GenericText(
-                    text = if (isLastPage) resourceString(R.string.get_started) else resourceString(
+                    text =  resourceString(
                         R.string.skip
                     ),
-                    color = if (isLastPage) TextPrimary else TextTertiary,
-                    fontSize = 12.ssp,
-                    fontWeight = if (isLastPage) FontWeight.W500 else null,
+                    color =  TextSecondary,
+                    fontSize = 11.ssp,
                 )
             }
             Spacer(modifier = Modifier.height(36.sdp))
