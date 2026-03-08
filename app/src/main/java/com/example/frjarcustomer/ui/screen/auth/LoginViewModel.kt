@@ -8,6 +8,7 @@ import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.core.location.LocationStoreHelper
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.navigation.routes.AppRoute
@@ -26,8 +27,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: Repository,
+    private val locationStoreHelper: LocationStoreHelper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+
     val previousRouteTab = savedStateHandle.toRoute<AppRoute.Login>().initialTab
     private val _selectedTabIndex = MutableStateFlow(previousRouteTab)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
@@ -155,6 +159,12 @@ class LoginViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun onLocationPermissionGranted() {
+        viewModelScope.launch {
+            locationStoreHelper.fetchAndSaveLocation()
         }
     }
 

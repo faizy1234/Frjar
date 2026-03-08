@@ -132,9 +132,11 @@ fun NavGraphBuilder.navigationAuthGraph(
             SecureAccountScreen(
                 onBackPress = { navHostController.navigateUp() },
                 onNext = { _, _, _ ->
-                    navHostController.navigate(AppRoute.AddAddress("sdkmskd"))
+                    navigateToHome(navHostController)
                 },
-                onSkip = { navHostController.navigate(AppRoute.AddAddress("sdkmsdmsk")) }
+                onSkip = {
+                    navigateToHome(navHostController)
+                }
             )
         }
         composable<AppRoute.AddAddress> { backStackEntry ->

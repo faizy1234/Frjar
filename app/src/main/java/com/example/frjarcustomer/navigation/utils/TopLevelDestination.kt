@@ -12,7 +12,7 @@ enum class TopLevelDestination(
 ) {
     HomeScreenNavigationRoute(
         route = AppRoute.Home,
-        icon = R.drawable.ic_home,
+        icon = R.drawable.ic_home_light,
         iconTextId = R.string.home,
     ),
     CollectionScreenNavigationRoute(

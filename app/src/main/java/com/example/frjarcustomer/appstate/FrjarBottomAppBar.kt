@@ -25,6 +25,8 @@ import com.example.frjarcustomer.navigation.utils.TopLevelDestination
 import com.example.frjarcustomer.navigation.utils.currentRouteClassName
 import com.example.frjarcustomer.navigation.utils.routeClassName
 import com.example.frjarcustomer.ui.components.GenericText
+import com.example.frjarcustomer.ui.theme.BottomIconDark
+import com.example.frjarcustomer.ui.theme.BottomIconLight
 import com.example.frjarcustomer.ui.theme.TextGreyscale500
 import com.example.frjarcustomer.ui.theme.TextPrimary
 import com.example.frjarcustomer.ui.theme.White
@@ -53,7 +55,7 @@ fun FrjarBottomAppBar(
         ) {
             bottomBarItems.forEach { destination ->
                 val isSelected = navController.currentRouteClassName == destination.routeClassName
-                val itemColor = if (isSelected) TextPrimary else TextGreyscale500
+                val itemColor = if (isSelected) BottomIconDark else BottomIconLight
                 NavigationBarItem(
                     selected = false,
                     onClick = {
@@ -83,7 +85,7 @@ fun FrjarBottomAppBar(
                         GenericText(
                             text = resourceString(destination.iconTextId),
                             fontSize = 8.ssp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.W500,
                             color = itemColor,
                         )
                     },

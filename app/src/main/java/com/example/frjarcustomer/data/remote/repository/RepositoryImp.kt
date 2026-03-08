@@ -39,6 +39,8 @@ class RepositoryImp @Inject constructor(
 
     private suspend fun createBaseRequest(
         phoneNumber: String? = null,
+        email: String? = null,
+        password: String? = null,
         isVerify: Boolean = false,
         isALLow: Boolean = false,
         otp: String? = null
@@ -48,6 +50,10 @@ class RepositoryImp @Inject constructor(
         deviceId = fcmRepository.getDeviceId(),
         appLang = languageProvider.getLanguageCode(),
         otp = if (isALLow) otp else null,
+        email = email,
+        latitude = sessionManager.getLatitude(),
+        longitude = sessionManager.getLongitude(),
+        password = password,
         isVerified = if (isALLow) isVerify else null,
         firebaseToken = fcmRepository.getCurrentToken(),
         appVersion = appConfig.versionName.toDoubleOrNull(),
@@ -64,6 +70,8 @@ class RepositoryImp @Inject constructor(
             userId = sessionManager.getUser()?.userId
                 ?: UserinfoManager.getUserId(),
             deviceId = fcmRepository.getDeviceId(),
+            latitude = sessionManager.getLatitude(),
+            longitude = sessionManager.getLongitude(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull(),
             phone = if (phoneNumber != null) NUMBER_PREFIX + phoneNumber else null,
@@ -78,11 +86,11 @@ class RepositoryImp @Inject constructor(
             userId = sessionManager.getUser()?.userId
                 ?: UserinfoManager.getUserId(),
             deviceId = fcmRepository.getDeviceId(),
+            latitude = sessionManager.getLatitude(),
+            longitude = sessionManager.getLongitude(),
             appLang = languageProvider.getLanguageCode(),
             appVersion = appConfig.versionName.toDoubleOrNull()
         )
-
-
 
 
     override suspend fun getCustomerAppSetting(): Flow<ApiResult<com.example.frjarcustomer.data.remote.dto.response.baseResponse.BaseResponse<com.example.frjarcustomer.data.remote.dto.response.appsetting.AppSettingData>>> =
@@ -230,6 +238,37 @@ class RepositoryImp @Inject constructor(
             stringProvider,
             languageProvider.getLanguageCode()
         ).ensureSuccessCode(languageProvider, stringProvider)
+
+    override suspend fun userRegister(
+        email: String,
+        phoneNumber: String,
+        password: String
+    ): Flow<ApiResult<BaseResponse<UserResponse>>> =
+        flow {
+            safeApiCall(
+                ioDispatcher,
+                {
+                    apiService.userRegister(
+                        createBaseRequest(
+                            email = email,
+                            phoneNumber = phoneNumber,
+                            password = password
+                        )
+                    )
+                },
+                stringProvider,
+                languageProvider.getLanguageCode()
+            ).ensureSuccessCode(languageProvider, stringProvider)
+                .collect { result ->
+                    if (result is ApiResult.Success) result.data.data?.let {
+                        sessionManager.setToken(
+                            it.token
+                        )
+                        sessionManager.setUser(it)
+                    }
+                    emit(result)
+                }
+        }
 
 }
 

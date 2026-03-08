@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.White
 
 @Composable
@@ -19,6 +20,7 @@ fun CartScreen(){
 
     Column(
         modifier = Modifier
+            .background(AuthScreenBackground)
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,

@@ -47,6 +47,12 @@ class SessionManagerImpl @Inject constructor(
         dataStore.putString(PreferencesKeys.LANGUAGE, value)
     }
 
+    override suspend fun getLatitude(): String? =
+        dataStore.getString(PreferencesKeys.LATITUDE).getOrNull()
+
+    override suspend fun getLongitude(): String? =
+        dataStore.getString(PreferencesKeys.LONGITUDE).getOrNull()
+
     override fun setLanguageInMemory(code: String?) {
         languageHolder.set(code?.takeIf { it.isNotBlank() } ?: DEFAULT_LANGUAGE)
     }

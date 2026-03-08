@@ -20,8 +20,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.frjarcustomer.R
@@ -30,6 +32,8 @@ import com.example.frjarcustomer.image.CoilImage
 import com.example.frjarcustomer.ui.components.AuthTextField
 import com.example.frjarcustomer.ui.components.GenericButton
 import com.example.frjarcustomer.ui.components.GenericText
+import com.example.frjarcustomer.ui.components.OverlayLoader
+import com.example.frjarcustomer.ui.components.ValidationShakeState
 import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 import com.example.frjarcustomer.ui.theme.ButtonPrimary
 import com.example.frjarcustomer.ui.theme.ButtonSecondary
@@ -50,8 +54,11 @@ fun SecureAccountScreen(
     val confirmPassword by viewModel.confirmPassword.collectAsState()
     val passwordVisible by viewModel.passwordVisible.collectAsState()
     val confirmPasswordVisible by viewModel.confirmPasswordVisible.collectAsState()
+    val validationShake by viewModel.validationShake.collectAsStateWithLifecycle(initialValue = ValidationShakeState())
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = false)
 
-    Column(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
         modifier = Modifier
             .fillMaxSize()
             .background(AuthScreenBackground)
@@ -109,7 +116,9 @@ fun SecureAccountScreen(
             value = email,
             isOptionalHeader = true,
             onValueChange = viewModel::setEmail,
-            placeholder = resourceString(R.string.example_email)
+            placeholder = resourceString(R.string.example_email),
+            fieldIndex = 0,
+            validationShake = validationShake
         )
         Spacer(modifier = Modifier.height(12.sdp))
 
@@ -121,9 +130,10 @@ fun SecureAccountScreen(
             isPassword = true,
             passwordVisible = passwordVisible,
             onTrailingIconClick = { viewModel.togglePasswordVisible() },
+            fieldIndex = 1,
+            validationShake = validationShake,
             trailingIcon = {
                 CoilImage(
-
                     url = if (passwordVisible) R.drawable.ic_eye_on_input else R.drawable.ic_eye_off_input,
                     contentDescription = null,
                     modifier = Modifier.size(18.sdp)
@@ -140,9 +150,10 @@ fun SecureAccountScreen(
             isPassword = true,
             passwordVisible = confirmPasswordVisible,
             onTrailingIconClick = { viewModel.toggleConfirmPasswordVisible() },
+            fieldIndex = 2,
+            validationShake = validationShake,
             trailingIcon = {
                 CoilImage(
-
                     url = if (confirmPasswordVisible) R.drawable.ic_eye_on_input else R.drawable.ic_eye_off_input,
                     contentDescription = null,
                     modifier = Modifier.size(18.sdp)
@@ -152,7 +163,7 @@ fun SecureAccountScreen(
 
         Spacer(modifier = Modifier.height(37.sdp))
         GenericButton(
-            onClick = { onNext(email, password, confirmPassword) },
+            onClick = { viewModel.onNextClick { onNext(email, password, confirmPassword) } },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(43.sdp),
@@ -182,5 +193,16 @@ fun SecureAccountScreen(
             )
         }
         Spacer(modifier = Modifier.height(25.sdp))
+    }
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                OverlayLoader()
+            }
+        }
     }
 }

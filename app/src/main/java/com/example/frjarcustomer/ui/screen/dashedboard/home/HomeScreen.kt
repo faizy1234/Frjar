@@ -1,5 +1,6 @@
 package com.example.frjarcustomer.ui.screen.dashedboard.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarDuration
 import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.appstate.resourceString
+import com.example.frjarcustomer.ui.theme.AuthScreenBackground
 
 @Composable
 fun HomeScreen(
@@ -28,6 +30,7 @@ fun HomeScreen(
 ) {
     Column(
         modifier = Modifier
+            .background(AuthScreenBackground)
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
