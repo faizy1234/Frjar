@@ -231,7 +231,8 @@ private fun MethodSelectStep(
                 modifier = Modifier
                     .height(34.sdp)
                     .width(26.sdp)
-                    .clickable { onBackPress() }
+                    .clickable { onBackPress() },
+                mirrorInRtl = true
             )
 
             Spacer(modifier = Modifier.height(16.sdp))
@@ -377,7 +378,8 @@ private fun InputEmailStep(
                 modifier = Modifier
                     .height(34.sdp)
                     .width(26.sdp)
-                    .clickable { onBackPress() }
+                    .clickable { onBackPress() },
+                mirrorInRtl = true
             )
             Spacer(modifier = Modifier.height(16.sdp))
 
@@ -469,7 +471,8 @@ private fun InputPhoneStep(
                 modifier = Modifier
                     .height(34.sdp)
                     .width(26.sdp)
-                    .clickable { onBackPress() }
+                    .clickable { onBackPress() },
+                mirrorInRtl = true
             )
             Spacer(modifier = Modifier.height(16.sdp))
 
@@ -545,7 +548,8 @@ private fun VerifyOtpStep(
             CoilImage(
                 url = R.drawable.ic_close_back,
                 contentDescription = null,
-                modifier = Modifier.size(26.dpScaled(), 34.dpScaled())
+                modifier = Modifier.size(26.dpScaled(), 34.dpScaled()),
+                mirrorInRtl = true
             )
         }
 //        OtpPageContent(
@@ -593,7 +597,8 @@ private fun NewPasswordStep(
             CoilImage(
                 url = R.drawable.ic_close_back,
                 contentDescription = null,
-                modifier = Modifier.size(26.dpScaled(), 34.dpScaled())
+                modifier = Modifier.size(26.dpScaled(), 34.dpScaled()),
+                mirrorInRtl = true
             )
         }
         Spacer(modifier = Modifier.height(24.dpScaled()))

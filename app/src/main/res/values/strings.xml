@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FRJAR | فرجار</string>
     <string name="english">English</string>
+    <string name="english_us">English (US)</string>
 
     <!-- Startup Flow -->
     <string name="lets_get_started_with_frjar">Let\'s get started with Frjar</string>

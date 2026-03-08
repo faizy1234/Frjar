@@ -11,9 +11,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
+import com.example.frjarcustomer.appstate.LocalCurrentLanguage
+
+private const val RTL_SCRIPT_SIZE_SCALE = 0.92f
+
+private fun lighterWeightForRtlScript(weight: FontWeight): FontWeight = when (weight.weight) {
+    in 700..999 -> FontWeight.SemiBold
+    in 600..699 -> FontWeight.Medium
+    in 500..599 -> FontWeight.Normal
+    else -> weight
+}
 
 @Composable
-
 fun GenericText(
     text: String,
     modifier: Modifier = Modifier,
@@ -29,7 +39,7 @@ fun GenericText(
     style: TextStyle? = null
 ) {
     val baseStyle = style ?: MaterialTheme.typography.bodyMedium
-    val resolvedStyle = baseStyle.copy(
+    var resolvedStyle = baseStyle.copy(
         color = color,
         fontFamily = fontFamily ?: baseStyle.fontFamily,
         fontSize = if (fontSize != TextUnit.Unspecified) fontSize else baseStyle.fontSize,
@@ -38,6 +48,18 @@ fun GenericText(
         letterSpacing = if (letterSpacing != TextUnit.Unspecified) letterSpacing else baseStyle.letterSpacing,
         textAlign = textAlign ?: baseStyle.textAlign
     )
+
+    val languageCode = LocalCurrentLanguage.current.languageCode
+    val isRtlScript = languageCode == "ar" || languageCode == "ur"
+    if (isRtlScript) {
+        val weight = resolvedStyle.fontWeight ?: FontWeight.Normal
+        resolvedStyle = resolvedStyle.copy(
+            fontSize = (resolvedStyle.fontSize.value * RTL_SCRIPT_SIZE_SCALE).sp,
+            lineHeight = (resolvedStyle.lineHeight.value * RTL_SCRIPT_SIZE_SCALE).sp,
+            fontWeight = lighterWeightForRtlScript(weight)
+        )
+    }
+
     Text(
         text = text,
         modifier = modifier,

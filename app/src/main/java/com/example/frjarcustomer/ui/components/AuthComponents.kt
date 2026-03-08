@@ -50,6 +50,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.frjarcustomer.appstate.resourceString
@@ -102,7 +103,6 @@ fun AuthToggle(
             label = "indicator_offset"
         )
 
-        // Sliding background indicator
         Box(
             modifier = Modifier
                 .width(tabWidth)
@@ -112,7 +112,6 @@ fun AuthToggle(
                 .background(TextPrimary)
         )
 
-        // Tabs on top
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(4.sdp)
@@ -160,6 +159,8 @@ fun AuthToggle(
                         text = title,
                         color = textColor,
                         fontSize = 11.ssp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.headlineMedium
                     )

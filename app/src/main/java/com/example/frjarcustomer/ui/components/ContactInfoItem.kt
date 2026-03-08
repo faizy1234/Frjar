@@ -130,7 +130,8 @@ fun ContactInfoRow(
             url = R.drawable.ic_arrow_right,
             contentDescription = "arrow",
             modifier = Modifier.size(14.sdp),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Fit,
+            mirrorInRtl = true
         )
     }
 }

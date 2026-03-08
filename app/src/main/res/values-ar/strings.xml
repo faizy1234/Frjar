@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FRJAR | فرجار</string>
     <string name="english">English</string>
+    <string name="english_us">الإنجليزية (الولايات المتحدة)</string>
 
     <string name="lets_get_started_with_frjar">يلا نبدأ مع فرجار</string>
     <string name="login">تسجيل الدخول</string>

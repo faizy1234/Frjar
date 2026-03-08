@@ -117,7 +117,8 @@ fun ReachOutScreen(
                         modifier = Modifier
                             .padding(start = 5.sdp)
                             .size(30.sdp),
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Fit,
+                        mirrorInRtl = true
                     )
                 }
             }

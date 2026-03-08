@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.input.pointer.pointerInput
@@ -124,7 +125,8 @@ fun OtpScreen(
                         modifier = Modifier
                             .height(34.sdp)
                             .width(26.sdp)
-                            .clickable { onChangeNumberClick()}
+                            .clickable { onChangeNumberClick()},
+                        mirrorInRtl = true
                     )
                 }
             }
@@ -164,7 +166,7 @@ fun OtpScreen(
                 GenericText(
                     text = resourceString(it),
                     modifier = Modifier.fillMaxWidth(),
-                    fontSize = 24.spScaled(),
+                    style = MaterialTheme.typography.titleLarge,
                     color = TextPrimary,
                     textAlign = TextAlign.Center
                 )

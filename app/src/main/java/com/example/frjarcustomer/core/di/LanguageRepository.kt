@@ -46,6 +46,7 @@ class LanguageRepository @Inject constructor(
     }
 
     suspend fun setLanguage(language: AppLanguage) {
+        LocaleManager.init(language.languageCode)
         _currentLanguage.value = language
         dataStore.putObject(PreferencesKeys.APP_LANGUAGE, language)
         sessionManager.setLanguageInMemory(language.languageCode)

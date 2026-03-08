@@ -22,6 +22,7 @@ import com.example.frjarcustomer.ui.screen.auth.otpScreen.OtpScreen
 import com.example.frjarcustomer.ui.screen.auth.otpScreen.contentHolder.OtpScreenContent
 import com.example.frjarcustomer.ui.screen.auth.reachout.ReachOutScreen
 import com.example.frjarcustomer.ui.screen.intro.splash.SplashViewModel
+import com.example.frjarcustomer.ui.screen.language.LanguageSelectionScreen
 import com.example.frjarcustomer.utils.openDialer
 import com.example.frjarcustomer.utils.openMapLocation
 import kotlinx.serialization.Serializable
@@ -47,7 +48,9 @@ fun NavGraphBuilder.navigationAuthGraph(
                 onLocationClick = { latitude, longitude ->
                     openMapLocation(context, latitude, longitude)
                 },
-                onLanguageClick = { },
+                onLanguageClick = {
+//                    navHostController.navigate(AppRoute.LanguageSelection)
+                                  },
                 onCreateAccountClick = { navHostController.navigate(AppRoute.Login(initialTab = 1)) },
                 onSignInClick = { navHostController.navigate(AppRoute.Login(initialTab = 0)) }
             )
@@ -155,6 +158,12 @@ fun NavGraphBuilder.navigationAuthGraph(
             )
         }
 
-
+        composable<AppRoute.LanguageSelection> {
+            val viewModel: com.example.frjarcustomer.ui.screen.language.LanguageSelectionViewModel = hiltViewModel()
+            LanguageSelectionScreen(
+                viewModel = viewModel,
+                onBack = { navHostController.navigateUp() }
+            )
+        }
     }
 }

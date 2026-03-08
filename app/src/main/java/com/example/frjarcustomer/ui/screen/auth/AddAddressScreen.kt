@@ -113,7 +113,8 @@ fun AddAddressScreen(
                     .align(Alignment.TopStart)
                     .height(34.sdp)
                     .width(26.sdp)
-                    .clickable { onBackPress() }
+                    .clickable { onBackPress() },
+                mirrorInRtl = true
             )
             CoilImage(
                 url = R.drawable.ic_location_banner,

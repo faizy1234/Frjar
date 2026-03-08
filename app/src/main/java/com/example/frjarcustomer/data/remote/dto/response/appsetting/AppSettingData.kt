@@ -3,6 +3,7 @@ package com.example.frjarcustomer.data.remote.dto.response.appsetting
 import com.example.frjarcustomer.data.remote.utils.AppLanguage
 import com.example.frjarcustomer.utils.LocaleManager
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.flow.MutableStateFlow
 
 data class AppSettingData(
     @SerializedName("_id") val id: String? = null,
@@ -118,6 +119,7 @@ data class AppSettingData(
     @SerializedName("feature_companies") val featureCompanies: List<com.example.frjarcustomer.data.remote.dto.response.appsetting.FeatureCompanyItem>? = null,
     @SerializedName("default_address") val defaultAddress: com.example.frjarcustomer.data.remote.dto.response.appsetting.DefaultAddressDto? = null
 ){
+
     val maintenanceMessageLocalized: String
         get() = (when (LocaleManager.currentLanguage) {
             AppLanguage.ARABIC.value -> appMaintenanceMessageAr ?: appMaintenanceMessageEn

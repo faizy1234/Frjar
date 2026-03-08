@@ -129,7 +129,8 @@ fun LoginScreen(
                     .width(26.sdp)
                     .clickable{
                         onBack.invoke()
-                    }
+                    },
+                mirrorInRtl = true
             )
 
 

@@ -10,9 +10,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.LayoutDirection
 import coil3.compose.AsyncImage
 import coil3.compose.SubcomposeAsyncImage
 
@@ -38,6 +40,10 @@ import coil3.compose.SubcomposeAsyncImage
  * ```
  */
 
+/**
+ * @param mirrorInRtl When true, flips the image horizontally in RTL so directional icons
+ * (e.g. back arrow) point the correct way. Use for back/forward/arrow icons only.
+ */
 @Composable
 fun CoilImage(
     url: Any?,
@@ -45,8 +51,13 @@ fun CoilImage(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     animate: Boolean = false,
+    mirrorInRtl: Boolean = false,
 ) {
     if (url == null) return
+
+    val layoutDirection = LocalLayoutDirection.current
+    val rtlScaleX = if (mirrorInRtl && layoutDirection == LayoutDirection.Rtl) -1f else 1f
+    val rtlMirrorModifier = Modifier.graphicsLayer { scaleX = rtlScaleX }
 
     if (animate) {
         var visible by remember { mutableStateOf(false) }
@@ -72,7 +83,7 @@ fun CoilImage(
             contentScale = contentScale,
             modifier = modifier.graphicsLayer {
                 this.alpha = alpha
-                this.scaleX = scale
+                this.scaleX = scale * rtlScaleX
                 this.scaleY = scale
             },
         )
@@ -82,7 +93,7 @@ fun CoilImage(
             model = url,
             contentDescription = contentDescription,
             contentScale = contentScale,
-            modifier = modifier,
+            modifier = rtlMirrorModifier.then(modifier),
         )
     }
 }

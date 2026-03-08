@@ -44,6 +44,9 @@ sealed interface AppRoute {
     @Serializable
     data object ForgetPassword : AppRoute
 
+    @Serializable
+    data object LanguageSelection : AppRoute
+
     // --------------- Dashboard graph ---------------
     @Serializable
     data object Home : AppRoute

@@ -75,7 +75,8 @@ fun LoginAuthContainer(
                 .padding(horizontal = 8.sdp)
                 .height(34.sdp)
                 .width(26.sdp)
-                .clickable { onBackClick() }
+                .clickable { onBackClick() },
+            mirrorInRtl = true
         )
         Box(modifier = Modifier.fillMaxWidth()) {
             AuthToggle(
