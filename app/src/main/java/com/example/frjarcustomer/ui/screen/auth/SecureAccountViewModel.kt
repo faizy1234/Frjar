@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.core.di.StringProvider
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.navigation.routes.AppRoute
@@ -25,7 +27,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SecureAccountViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: Repository
+    private val repository: Repository,
+    private val stringProvider: StringProvider
+
 ) : ViewModel() {
 
     val phoneNumber = savedStateHandle.toRoute<AppRoute.SecureAccount>().phoneNumber
@@ -61,16 +65,17 @@ class SecureAccountViewModel @Inject constructor(
         val result = AuthValidation.validate(
             listOf(
                 _email.value to listOf(
-                    ValidationRules.required("Email is required"),
-                    ValidationRules.email("Enter a valid email address")
+                    ValidationRules.required(stringProvider.getString(R.string.please_enter_email_address)),
+                    ValidationRules.email(stringProvider.getString(R.string.please_enter_valid_email_address))
                 ),
                 _password.value to listOf(
-                    ValidationRules.required("Password is required"),
-                    ValidationRules.passwordStrength()
+                    ValidationRules.required(stringProvider.getString(R.string.please_enter_password)),
+                    ValidationRules.passwordStrength(stringProvider.getString(R.string.password_must_be_at_least_six_characters))
                 ),
                 _confirmPassword.value to listOf(
-                    ValidationRules.required("Confirm password is required"),
-                    ValidationRules.match(_password.value, "Passwords do not match")
+                    ValidationRules.required(stringProvider.getString(R.string.please_enter_confirm_password)),
+                    ValidationRules.passwordStrength(stringProvider.getString(R.string.confirm_password_must_be_at_least_six_characters)),
+                    ValidationRules.match(_password.value, stringProvider.getString(R.string.passwords_do_not_match))
                 )
             )
         )
@@ -81,8 +86,17 @@ class SecureAccountViewModel @Inject constructor(
                     message = MessageContent.PlainString(result.firstErrorMessage)
                 )
             )
+            val shakeIndices = when (val firstInvalid = result.invalidIndices.first()) {
+                0 -> setOf(0)
+                1 -> setOf(1)
+                2 -> if (_confirmPassword.value.isNotEmpty() && _confirmPassword.value != _password.value)
+                    setOf(1, 2)
+                else
+                    setOf(2)
+                else -> setOf(firstInvalid)
+            }
             _validationShake.update {
-                ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
+                ValidationShakeState(it.triggerId + 1, shakeIndices)
             }
         } else {
 

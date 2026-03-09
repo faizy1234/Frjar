@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.resourceString
 import com.example.frjarcustomer.image.CoilImage
@@ -74,6 +75,7 @@ fun LoginWithPassword(
                 content = {
                     GenericText(
                         text = resourceString(R.string.login),
+                        fontWeight = FontWeight.SemiBold,
                         fontSize = 12.ssp,
                         color = TextOnAccent
                     )

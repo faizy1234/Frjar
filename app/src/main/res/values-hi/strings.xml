@@ -587,6 +587,8 @@
     <string name="please_enter_email_address">कृपया ईमेल पता दर्ज करें</string>
     <string name="please_enter_valid_email_address">कृपया मान्य ईमेल पता दर्ज करें</string>
     <string name="please_enter_confirm_password">कृपया कन्फ़र्म पासवर्ड दर्ज करें</string>
+    <string name="confirm_password_must_be_at_least_six_characters">कन्फ़र्म पासवर्ड कम से कम 6 अक्षर का होना चाहिए</string>
+    <string name="passwords_do_not_match">पासवर्ड मेल नहीं खाते</string>
     <string name="please_select_location_from_saudi_arabia">कृपया सऊदी अरब से स्थान चुनें</string>
     <string name="please_select_any_verification_method">कृपया किसी भी सत्यापन विधि का चयन करें।</string>
     <string name="please_enter_new_password">कृपया नया पासवर्ड दर्ज करें</string>

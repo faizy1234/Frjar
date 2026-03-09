@@ -587,6 +587,8 @@
     <string name="please_enter_email_address">براہ کرم ای میل ایڈریس درج کریں</string>
     <string name="please_enter_valid_email_address">براہ کرم درست ای میل پتہ درج کریں</string>
     <string name="please_enter_confirm_password">براہِ کرم تصدیقی پاس ورڈ درج کریں</string>
+    <string name="confirm_password_must_be_at_least_six_characters">تصدیقی پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے</string>
+    <string name="passwords_do_not_match">پاس ورڈ مماثل نہیں ہیں</string>
     <string name="please_select_location_from_saudi_arabia">براہ کرم سعودی عرب سے مقام منتخب کریں</string>
     <string name="please_select_any_verification_method">براہ کرم کسی بھی توثیقی طریقہ کا انتخاب کریں</string>
     <string name="please_enter_new_password">براہ کرم نیا پاس ورڈ درج کریں</string>

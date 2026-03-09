@@ -62,10 +62,13 @@ class LoginViewModel @Inject constructor(
         moveToOtp: (String) -> Unit,
         moveToSignUpOtp: (String) -> Unit
     ) {
+        viewModelScope.launch {
+
+        }
         val result = AuthValidation.validate(
             listOf(
                 _mobileNumber.value to listOf(
-                    ValidationRules.required("Mobile number is Required"),
+                    ValidationRules.required(stringProvider.getString(R.string.please_input_your_mobile_number)),
                     ValidationRules.custom(stringProvider.getString(R.string.phone_number_must_be_9_digits)) { it.length == 9 },
 
                     ValidationRules.custom(stringProvider.getString(R.string.mobile_number_should_start_from_5)) { it.isNotEmpty() && it.first() == '5' }
@@ -73,15 +76,18 @@ class LoginViewModel @Inject constructor(
             )
         )
         if (result != null) {
-            SnackbarController.show(
-                SnackbarModel(
-                    type = MessageType.ERROR,
-                    message = MessageContent.PlainString(result.firstErrorMessage)
+            viewModelScope.launch {
+                SnackbarController.show(
+                    SnackbarModel(
+                        type = MessageType.ERROR,
+                        message = MessageContent.PlainString(result.firstErrorMessage)
+                    )
                 )
-            )
-            _validationShake.update {
-                ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
+                _validationShake.update {
+                    ValidationShakeState(it.triggerId + 1, setOf(result.invalidIndices.first()))
+                }
             }
+
         } else {
             when (_selectedTabIndex.value) {
                 0 -> {

@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.core.di.StringProvider
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.navigation.routes.AppRoute
@@ -30,7 +32,8 @@ import kotlin.reflect.typeOf
 @HiltViewModel
 class OtpViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val repository: Repository
+    private val repository: Repository,
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val typeMap = mapOf(
@@ -46,7 +49,7 @@ class OtpViewModel @Inject constructor(
     private val _otp = MutableStateFlow("")
     val otp: StateFlow<String> = _otp.asStateFlow()
 
-    private val _countdownSeconds = MutableStateFlow(10)
+    private val _countdownSeconds = MutableStateFlow(90)
     val countdownSeconds: StateFlow<Int> = _countdownSeconds.asStateFlow()
 
     private val _validationShake = MutableStateFlow(ValidationShakeState())
@@ -78,7 +81,7 @@ class OtpViewModel @Inject constructor(
     }
 
     fun resetTimer() {
-        _countdownSeconds.update { 10 }
+        _countdownSeconds.update { 90 }
         startTimer()
     }
 
@@ -121,8 +124,8 @@ class OtpViewModel @Inject constructor(
         val result = AuthValidation.validate(
             listOf(
                 _otp.value to listOf(
-                    ValidationRules.required("Verification code is required"),
-                    ValidationRules.custom("Please enter 4-digit verification code") { it.length == 4 }
+                    ValidationRules.required(stringProvider.getString(R.string.please_enter_otp_code)),
+                    ValidationRules.custom(stringProvider.getString(R.string.enter_the_4digit_otp)) { it.length == 4 }
                 )
             )
         )
@@ -134,7 +137,8 @@ class OtpViewModel @Inject constructor(
                 )
             )
             _validationShake.update {
-                ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
+                // Only shake the field that has the shown error message (first invalid)
+                ValidationShakeState(it.triggerId + 1, setOf(result.invalidIndices.first()))
             }
         } else {
             viewModelScope.launch {

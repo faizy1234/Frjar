@@ -587,6 +587,8 @@
     <string name="please_enter_email_address">يرجى إدخال عنوان بريدك الإلكتروني</string>
     <string name="please_enter_valid_email_address">يرجى إدخال عنوان بريد إلكتروني صالح</string>
     <string name="please_enter_confirm_password">الرجاء إدخال تأكيد كلمة المرور</string>
+    <string name="confirm_password_must_be_at_least_six_characters">يجب أن تكون كلمة المرور للتأكيد 6 أحرف على الأقل</string>
+    <string name="passwords_do_not_match">كلمات المرور غير متطابقة</string>
     <string name="please_select_location_from_saudi_arabia">من فضلك اختر موقعًا من المملكة العربية السعودية</string>
     <string name="please_select_any_verification_method">يرجى اختيار أي طريقة للتحقق</string>
     <string name="please_enter_new_password">يرجى إدخال كلمة مرور جديدة</string>

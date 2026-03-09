@@ -32,7 +32,9 @@ import com.example.frjarcustomer.appstate.FrjarBottomAppBar
 import com.example.frjarcustomer.appstate.LanguageAwareComponent
 import com.example.frjarcustomer.appstate.LocalPaddingValues
 import com.example.frjarcustomer.appstate.MainActivityVm
+import com.example.frjarcustomer.appstate.ObserveAsEvents
 import com.example.frjarcustomer.appstate.ProfileTabEvent
+import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
 import com.example.frjarcustomer.navigation.graphs.HomeGraph
@@ -65,6 +67,13 @@ class MainActivity : ComponentActivity() {
                 initialValue = AppLanguage.DEFAULT
             )
             FrjarTheme(currentLanguage = currentLanguage, darkTheme = false) {
+                ObserveAsEvents(flow = SnackbarController.events) { event ->
+                    SnackbarController.show(
+                        SnackbarModel(message = MessageContent.PlainString(event.message))
+                    )
+                }
+
+                val currentSnackbar by SnackbarController.current.collectAsStateWithLifecycle(initialValue = null)
                 val navController = rememberNavController()
                 val topLevelDestination = listOf(
                     TopLevelDestination.HomeScreenNavigationRoute,
@@ -91,7 +100,6 @@ class MainActivity : ComponentActivity() {
                     viewModel = mainActivityVm,
                     activityContext = this@MainActivity,
                 ) {
-                    val currentSnackbar by SnackbarController.current.collectAsStateWithLifecycle(initialValue = null)
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         containerColor = Color.Transparent,

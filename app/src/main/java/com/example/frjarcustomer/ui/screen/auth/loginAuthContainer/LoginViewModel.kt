@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.frjarcustomer.R
 import com.example.frjarcustomer.appstate.MessageContent
 import com.example.frjarcustomer.appstate.MessageType
 import com.example.frjarcustomer.appstate.SnackbarController
 import com.example.frjarcustomer.appstate.SnackbarModel
+import com.example.frjarcustomer.core.di.StringProvider
 import com.example.frjarcustomer.data.remote.repository.Repository
 import com.example.frjarcustomer.data.remote.utils.ApiResult
 import com.example.frjarcustomer.navigation.routes.AppRoute
@@ -28,7 +30,8 @@ import kotlin.reflect.typeOf
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: Repository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val typeMap = mapOf(
@@ -90,13 +93,13 @@ class LoginViewModel @Inject constructor(
         val result = AuthValidation.validate(
             listOf(
                 _mobileNumber.value to listOf(
-                    ValidationRules.required("Mobile number is required"),
-                    ValidationRules.custom("Must be 9 digits") { it.length == 9 },
-                    ValidationRules.custom("This number must start with 5") { it.isNotEmpty() && it.first() == '5' }
+                    ValidationRules.required(stringProvider.getString(R.string.please_input_your_mobile_number)),
+                    ValidationRules.custom(stringProvider.getString(R.string.phone_number_must_be_9_digits)) { it.length == 9 },
+                    ValidationRules.custom(stringProvider.getString(R.string.mobile_number_should_start_from_5)) { it.isNotEmpty() && it.first() == '5' }
                 ),
                 _password.value to listOf(
-                    ValidationRules.required("Password is required"),
-                    ValidationRules.passwordStrength()
+                    ValidationRules.required(stringProvider.getString(R.string.please_enter_password)),
+                    ValidationRules.passwordStrength(stringProvider.getString(R.string.password_must_be_at_least_six_characters))
                 )
             )
         )
@@ -108,7 +111,7 @@ class LoginViewModel @Inject constructor(
                 )
             )
             _validationShake.update {
-                ValidationShakeState(it.triggerId + 1, result.invalidIndices.toSet())
+                ValidationShakeState(it.triggerId + 1, setOf(result.invalidIndices.first()))
             }
         } else {
             viewModelScope.launch {

@@ -184,7 +184,7 @@ fun SecureAccountScreen(
                     GenericText(
                         text = resourceString(R.string.next),
                         fontSize = 12.ssp,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.SemiBold,
                         color = ButtonSecondary,
                     )
                 }
@@ -199,7 +199,7 @@ fun SecureAccountScreen(
                 GenericText(
                     text = resourceString(R.string.skip),
                     fontSize = 12.ssp,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.SemiBold,
                     color = ButtonSecondary,
                 )
             }

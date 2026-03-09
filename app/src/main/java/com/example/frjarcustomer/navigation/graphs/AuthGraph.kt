@@ -83,7 +83,7 @@ fun NavGraphBuilder.navigationAuthGraph(
                                 titleText = R.string.enter_the_4digit_otp,
                                 messageText = R.string.we_have_sent_a_verification_code_to_phone_number,
                                 changeNumberText = R.string.change_number,
-                                primaryButtonText = R.string.continue_,
+                                primaryButtonText = R.string.sign_in,
                             )
                         )
                     )

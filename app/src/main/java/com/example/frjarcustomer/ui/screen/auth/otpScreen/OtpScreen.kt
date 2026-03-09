@@ -159,6 +159,7 @@ fun OtpScreen(
                             GenericText(
                                 text = resourceString(it),
                                 fontSize = 16.spScaled(),
+                                fontWeight = FontWeight.SemiBold,
                                 color = TextOnAccent
                             )
                         }

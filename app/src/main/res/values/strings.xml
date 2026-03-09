@@ -591,6 +591,8 @@
     <string name="please_enter_email_address">Please enter email address</string>
     <string name="please_enter_valid_email_address">Please enter valid email address</string>
     <string name="please_enter_confirm_password">Please enter confirm password</string>
+    <string name="confirm_password_must_be_at_least_six_characters">Confirm password must be at least 6 characters</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="please_select_location_from_saudi_arabia">Please select location from Saudi Arabia</string>
     <string name="please_select_any_verification_method">Please select any verification method</string>
     <string name="please_enter_new_password">Please enter new password</string>
